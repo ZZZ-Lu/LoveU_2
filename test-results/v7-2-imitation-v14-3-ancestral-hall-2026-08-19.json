@@ -1,0 +1,96 @@
+{
+  "version": "V7-2仿V14-3",
+  "case": "祠堂对质",
+  "runs": [
+    {
+      "shotCount": 7,
+      "promptLength": 626,
+      "imaginationLength": 1265,
+      "spatialMentions": 1,
+      "cameraVocabulary": 5,
+      "dialogue": 4,
+      "atomicityWarnings": 0
+    },
+    {
+      "shotCount": 4,
+      "promptLength": 206,
+      "imaginationLength": 508,
+      "spatialMentions": 1,
+      "cameraVocabulary": 3,
+      "dialogue": 4,
+      "atomicityWarnings": 0
+    },
+    {
+      "shotCount": 0,
+      "promptLength": 0,
+      "imaginationLength": 1329,
+      "spatialMentions": 0,
+      "cameraVocabulary": 0,
+      "dialogue": 0,
+      "atomicityWarnings": 0
+    },
+    {
+      "shotCount": 9,
+      "promptLength": 551,
+      "imaginationLength": 765,
+      "spatialMentions": 1,
+      "cameraVocabulary": 4,
+      "dialogue": 4,
+      "atomicityWarnings": 0
+    },
+    {
+      "shotCount": 7,
+      "promptLength": 627,
+      "imaginationLength": 1324,
+      "spatialMentions": 10,
+      "cameraVocabulary": 5,
+      "dialogue": 4,
+      "atomicityWarnings": 0
+    },
+    {
+      "shotCount": 5,
+      "promptLength": 517,
+      "imaginationLength": 1322,
+      "spatialMentions": 11,
+      "cameraVocabulary": 5,
+      "dialogue": 4,
+      "atomicityWarnings": 0
+    },
+    {
+      "shotCount": 6,
+      "promptLength": 504,
+      "imaginationLength": 1011,
+      "spatialMentions": 8,
+      "cameraVocabulary": 6,
+      "dialogue": 4,
+      "atomicityWarnings": 0
+    },
+    {
+      "shotCount": 5,
+      "promptLength": 442,
+      "imaginationLength": 710,
+      "spatialMentions": 4,
+      "cameraVocabulary": 3,
+      "dialogue": 4,
+      "atomicityWarnings": 1
+    },
+    {
+      "shotCount": 6,
+      "promptLength": 515,
+      "imaginationLength": 792,
+      "spatialMentions": 7,
+      "cameraVocabulary": 5,
+      "dialogue": 3,
+      "atomicityWarnings": 0
+    },
+    {
+      "shotCount": 6,
+      "promptLength": 457,
+      "imaginationLength": 1756,
+      "spatialMentions": 6,
+      "cameraVocabulary": 4,
+      "dialogue": 4,
+      "atomicityWarnings": 0
+    }
+  ]
+}

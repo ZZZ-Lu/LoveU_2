@@ -1,0 +1,179 @@
+{
+  "version": "V7-2仿V14",
+  "results": [
+    {
+      "id": "action",
+      "title": "雨夜拦车",
+      "script": "12-4 城外驿道 雨夜 外\n人物：顾昭、阿梨、车夫\n△马车疾驰，阿梨从路旁冲出，车夫猛拉缰绳。\n车夫：不要命了？！\n阿梨（喘息）：顾大人，我家小姐被人带走了！\n△车帘掀开，顾昭看清她手腕上的血迹。\n顾昭：上车。谁带走的，路上说。\n阿梨（愣住，随即点头）：是！",
+      "runs": [
+        {
+          "shotCount": 9,
+          "promptLength": 489,
+          "imaginationLength": 2720,
+          "spatialMentions": 3,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 8,
+          "promptLength": 572,
+          "imaginationLength": 920,
+          "spatialMentions": 4,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 8,
+          "promptLength": 685,
+          "imaginationLength": 2150,
+          "spatialMentions": 5,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 7,
+          "promptLength": 459,
+          "imaginationLength": 1263,
+          "spatialMentions": 8,
+          "cameraVocabulary": 4,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 568,
+          "imaginationLength": 1918,
+          "spatialMentions": 5,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 1
+        },
+        {
+          "shotCount": 7,
+          "promptLength": 512,
+          "imaginationLength": 1403,
+          "spatialMentions": 2,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 8,
+          "promptLength": 552,
+          "imaginationLength": 1104,
+          "spatialMentions": 4,
+          "cameraVocabulary": 4,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 7,
+          "promptLength": 572,
+          "imaginationLength": 1182,
+          "spatialMentions": 4,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 10,
+          "promptLength": 556,
+          "imaginationLength": 2247,
+          "spatialMentions": 6,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 8,
+          "promptLength": 516,
+          "imaginationLength": 1295,
+          "spatialMentions": 6,
+          "cameraVocabulary": 7,
+          "atomicityWarnings": 0
+        }
+      ]
+    },
+    {
+      "id": "republic",
+      "title": "舞会交接",
+      "script": "14-4 百乐门舞池 夜 内\n人物：沈砚、白露、特务\n△沈砚与白露旋转擦肩，一枚胶卷落入白露掌心。\n白露（笑着）：先生踩到我的裙子了。\n沈砚：抱歉。\n△二人分开，白露看见出口处的特务正在盯着她。",
+      "runs": [
+        {
+          "shotCount": 6,
+          "promptLength": 420,
+          "imaginationLength": 2753,
+          "spatialMentions": 2,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 771,
+          "imaginationLength": 1372,
+          "spatialMentions": 8,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 7,
+          "promptLength": 556,
+          "imaginationLength": 1849,
+          "spatialMentions": 3,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 7,
+          "promptLength": 709,
+          "imaginationLength": 1867,
+          "spatialMentions": 7,
+          "cameraVocabulary": 4,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 621,
+          "imaginationLength": 1491,
+          "spatialMentions": 6,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 577,
+          "imaginationLength": 822,
+          "spatialMentions": 6,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 9,
+          "promptLength": 1085,
+          "imaginationLength": 1481,
+          "spatialMentions": 17,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 544,
+          "imaginationLength": 1552,
+          "spatialMentions": 5,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 558,
+          "imaginationLength": 1789,
+          "spatialMentions": 9,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 7,
+          "promptLength": 713,
+          "imaginationLength": 2195,
+          "spatialMentions": 4,
+          "cameraVocabulary": 7,
+          "atomicityWarnings": 0
+        }
+      ]
+    }
+  ]
+}

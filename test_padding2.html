@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body {
+    font-family: sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 2.15;
+  }
+  .native::selection {
+    background: #2f93df;
+    color: #fff;
+  }
+  .fake {
+    background: #2f93df;
+    color: #fff;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    padding: 8.625px 0;
+  }
+</style>
+</head>
+<body>
+  <div class="native">This is native selection text.<br>Select me to see the height.</div>
+  <br>
+  <div><span class="fake">This is fake selection text.<br>It should have the same height.</span></div>
+</body>
+</html>

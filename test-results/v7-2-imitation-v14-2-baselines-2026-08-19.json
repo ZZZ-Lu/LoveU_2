@@ -1,0 +1,664 @@
+{
+  "version": "V7-2仿V14-2",
+  "prior": [
+    {
+      "id": "costume-family",
+      "title": "祠堂对质",
+      "shots": [
+        5,
+        6,
+        5,
+        5,
+        7,
+        5,
+        5,
+        6,
+        5,
+        7
+      ]
+    },
+    {
+      "id": "costume-strategy",
+      "title": "密折试探",
+      "shots": [
+        5,
+        5,
+        4,
+        4,
+        6,
+        4,
+        4,
+        4,
+        4,
+        4
+      ]
+    },
+    {
+      "id": "action",
+      "title": "雨夜拦车",
+      "shots": [
+        7,
+        11,
+        10,
+        8,
+        6,
+        6,
+        9,
+        6,
+        8,
+        6
+      ]
+    }
+  ],
+  "results": [
+    {
+      "id": "modern-romance",
+      "title": "电梯重逢",
+      "script": "3-2 写字楼电梯 早 内\n人物：程野、许念\n△电梯门将要合拢，程野伸手挡住。许念抬头，两人同时愣住。\n许念：你不是在国外吗？\n程野：昨晚刚回来。\n△电梯超载提示响起。\n程野（看着她）：看来有人不欢迎我。",
+      "runs": [
+        {
+          "shotCount": 8,
+          "promptLength": 840,
+          "imaginationLength": 2018,
+          "spatialMentions": 10,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 539,
+          "imaginationLength": 1478,
+          "spatialMentions": 7,
+          "cameraVocabulary": 3,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 5,
+          "promptLength": 526,
+          "imaginationLength": 1489,
+          "spatialMentions": 6,
+          "cameraVocabulary": 4,
+          "atomicityWarnings": 2
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 616,
+          "imaginationLength": 2962,
+          "spatialMentions": 4,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 7,
+          "promptLength": 577,
+          "imaginationLength": 2268,
+          "spatialMentions": 6,
+          "cameraVocabulary": 4,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 7,
+          "promptLength": 488,
+          "imaginationLength": 1135,
+          "spatialMentions": 7,
+          "cameraVocabulary": 7,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 8,
+          "promptLength": 692,
+          "imaginationLength": 1555,
+          "spatialMentions": 12,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 604,
+          "imaginationLength": 2012,
+          "spatialMentions": 16,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 1
+        },
+        {
+          "shotCount": 7,
+          "promptLength": 589,
+          "imaginationLength": 1234,
+          "spatialMentions": 8,
+          "cameraVocabulary": 4,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 7,
+          "promptLength": 529,
+          "imaginationLength": 2356,
+          "spatialMentions": 5,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        }
+      ]
+    },
+    {
+      "id": "revenge",
+      "title": "宴会揭面",
+      "script": "10-5 酒店宴会厅 夜 内\n人物：林澜、周曼、宾客\n周曼：保安，把这个冒充林家千金的女人赶出去！\n△林澜摘下手套，露出祖母绿家徽戒指。\n林澜：三年不见，周小姐连林家的东西都认不得了？\n△四周宾客哗然。",
+      "runs": [
+        {
+          "shotCount": 5,
+          "promptLength": 499,
+          "imaginationLength": 1088,
+          "spatialMentions": 11,
+          "cameraVocabulary": 7,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 5,
+          "promptLength": 577,
+          "imaginationLength": 528,
+          "spatialMentions": 9,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 4,
+          "promptLength": 399,
+          "imaginationLength": 1847,
+          "spatialMentions": 6,
+          "cameraVocabulary": 4,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 724,
+          "imaginationLength": 2176,
+          "spatialMentions": 11,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 683,
+          "imaginationLength": 1843,
+          "spatialMentions": 10,
+          "cameraVocabulary": 7,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 656,
+          "imaginationLength": 1908,
+          "spatialMentions": 8,
+          "cameraVocabulary": 8,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 7,
+          "promptLength": 730,
+          "imaginationLength": 1674,
+          "spatialMentions": 17,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 7,
+          "promptLength": 654,
+          "imaginationLength": 1909,
+          "spatialMentions": 12,
+          "cameraVocabulary": 8,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 5,
+          "promptLength": 481,
+          "imaginationLength": 1574,
+          "spatialMentions": 7,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 7,
+          "promptLength": 682,
+          "imaginationLength": 1844,
+          "spatialMentions": 12,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 0
+        }
+      ]
+    },
+    {
+      "id": "suspense",
+      "title": "冰箱里的证据",
+      "script": "5-8 出租屋厨房 深夜 内\n人物：陈默、秦雯\n△秦雯戴着手套拉开冰箱，冷气涌出。\n秦雯：死者失踪七天，牛奶却是昨天买的。\n陈默看向门锁：凶手回来过。\n△走廊外突然传来钥匙插入锁孔的声音。",
+      "runs": [
+        {
+          "shotCount": 7,
+          "promptLength": 635,
+          "imaginationLength": 848,
+          "spatialMentions": 8,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 5,
+          "promptLength": 629,
+          "imaginationLength": 1976,
+          "spatialMentions": 10,
+          "cameraVocabulary": 7,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 7,
+          "promptLength": 638,
+          "imaginationLength": 1989,
+          "spatialMentions": 8,
+          "cameraVocabulary": 4,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 5,
+          "promptLength": 419,
+          "imaginationLength": 2329,
+          "spatialMentions": 7,
+          "cameraVocabulary": 3,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 4,
+          "promptLength": 375,
+          "imaginationLength": 872,
+          "spatialMentions": 10,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 664,
+          "imaginationLength": 762,
+          "spatialMentions": 13,
+          "cameraVocabulary": 7,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 430,
+          "imaginationLength": 1885,
+          "spatialMentions": 4,
+          "cameraVocabulary": 4,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 5,
+          "promptLength": 406,
+          "imaginationLength": 1528,
+          "spatialMentions": 2,
+          "cameraVocabulary": 4,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 4,
+          "promptLength": 466,
+          "imaginationLength": 2128,
+          "spatialMentions": 3,
+          "cameraVocabulary": 4,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 450,
+          "imaginationLength": 911,
+          "spatialMentions": 2,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 0
+        }
+      ]
+    },
+    {
+      "id": "xianxia",
+      "title": "断契",
+      "script": "26-1 诛仙台 黄昏 外\n人物：玄夜、云璃\n云璃：这一剑之后，你我两清。\n△云璃割破掌心，灵契红线在两人之间亮起。\n玄夜（上前一步）：你若真想两清，为何还在发抖？\n△云璃握剑的手骤然收紧。",
+      "runs": [
+        {
+          "shotCount": 4,
+          "promptLength": 520,
+          "imaginationLength": 933,
+          "spatialMentions": 4,
+          "cameraVocabulary": 4,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 7,
+          "promptLength": 636,
+          "imaginationLength": 1348,
+          "spatialMentions": 7,
+          "cameraVocabulary": 8,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 627,
+          "imaginationLength": 1979,
+          "spatialMentions": 10,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 5,
+          "promptLength": 414,
+          "imaginationLength": 2832,
+          "spatialMentions": 6,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 659,
+          "imaginationLength": 1285,
+          "spatialMentions": 7,
+          "cameraVocabulary": 7,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 1193,
+          "imaginationLength": 744,
+          "spatialMentions": 6,
+          "cameraVocabulary": 9,
+          "atomicityWarnings": 2
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 575,
+          "imaginationLength": 2690,
+          "spatialMentions": 6,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 642,
+          "imaginationLength": 1832,
+          "spatialMentions": 4,
+          "cameraVocabulary": 7,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 694,
+          "imaginationLength": 1575,
+          "spatialMentions": 6,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 5,
+          "promptLength": 685,
+          "imaginationLength": 2223,
+          "spatialMentions": 6,
+          "cameraVocabulary": 7,
+          "atomicityWarnings": 0
+        }
+      ]
+    },
+    {
+      "id": "republic",
+      "title": "舞会交接",
+      "script": "14-4 百乐门舞池 夜 内\n人物：沈砚、白露、特务\n△沈砚与白露旋转擦肩，一枚胶卷落入白露掌心。\n白露（笑着）：先生踩到我的裙子了。\n沈砚：抱歉。\n△二人分开，白露看见出口处的特务正在盯着她。",
+      "runs": [
+        {
+          "shotCount": 7,
+          "promptLength": 676,
+          "imaginationLength": 1277,
+          "spatialMentions": 8,
+          "cameraVocabulary": 8,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 8,
+          "promptLength": 601,
+          "imaginationLength": 1922,
+          "spatialMentions": 7,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 7,
+          "promptLength": 704,
+          "imaginationLength": 1167,
+          "spatialMentions": 13,
+          "cameraVocabulary": 3,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 7,
+          "promptLength": 422,
+          "imaginationLength": 1694,
+          "spatialMentions": 3,
+          "cameraVocabulary": 4,
+          "atomicityWarnings": 1
+        },
+        {
+          "shotCount": 10,
+          "promptLength": 974,
+          "imaginationLength": 2720,
+          "spatialMentions": 13,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 7,
+          "promptLength": 628,
+          "imaginationLength": 1266,
+          "spatialMentions": 9,
+          "cameraVocabulary": 7,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 7,
+          "promptLength": 718,
+          "imaginationLength": 2120,
+          "spatialMentions": 9,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 684,
+          "imaginationLength": 1787,
+          "spatialMentions": 12,
+          "cameraVocabulary": 7,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 7,
+          "promptLength": 645,
+          "imaginationLength": 2083,
+          "spatialMentions": 10,
+          "cameraVocabulary": 8,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 5,
+          "promptLength": 493,
+          "imaginationLength": 1742,
+          "spatialMentions": 3,
+          "cameraVocabulary": 7,
+          "atomicityWarnings": 0
+        }
+      ]
+    },
+    {
+      "id": "family",
+      "title": "病房缴费单",
+      "script": "9-3 医院走廊 日 内\n人物：母亲、陈嘉、护士\n护士：今天下班前还要补交两万元。\n△护士离开。母亲把缴费单折起藏到身后。\n陈嘉：妈，你是不是把房子卖了？\n母亲（笑）：别瞎想，妈有钱。",
+      "runs": [
+        {
+          "shotCount": 5,
+          "promptLength": 474,
+          "imaginationLength": 2082,
+          "spatialMentions": 9,
+          "cameraVocabulary": 7,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 5,
+          "promptLength": 597,
+          "imaginationLength": 1413,
+          "spatialMentions": 6,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 1
+        },
+        {
+          "shotCount": 4,
+          "promptLength": 491,
+          "imaginationLength": 3500,
+          "spatialMentions": 10,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 3,
+          "promptLength": 370,
+          "imaginationLength": 1809,
+          "spatialMentions": 6,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 5,
+          "promptLength": 506,
+          "imaginationLength": 907,
+          "spatialMentions": 6,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 5,
+          "promptLength": 727,
+          "imaginationLength": 4053,
+          "spatialMentions": 7,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 530,
+          "imaginationLength": 2034,
+          "spatialMentions": 7,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 5,
+          "promptLength": 497,
+          "imaginationLength": 1105,
+          "spatialMentions": 6,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 5,
+          "promptLength": 570,
+          "imaginationLength": 2232,
+          "spatialMentions": 9,
+          "cameraVocabulary": 3,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 4,
+          "promptLength": 544,
+          "imaginationLength": 2079,
+          "spatialMentions": 7,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 0
+        }
+      ]
+    },
+    {
+      "id": "workplace",
+      "title": "方案署名",
+      "script": "6-7 会议室 日 内\n人物：叶晴、王总、李主管\n李主管：这套方案是我带团队熬了三个月做出来的。\n叶晴：是吗？\n△叶晴按下遥控器，屏幕出现文件修改记录，作者一栏全是叶晴。\n王总转头看向李主管。",
+      "runs": [
+        {
+          "shotCount": 4,
+          "promptLength": 337,
+          "imaginationLength": 880,
+          "spatialMentions": 4,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 1
+        },
+        {
+          "shotCount": 5,
+          "promptLength": 408,
+          "imaginationLength": 643,
+          "spatialMentions": 4,
+          "cameraVocabulary": 4,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 5,
+          "promptLength": 510,
+          "imaginationLength": 1201,
+          "spatialMentions": 11,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 4,
+          "promptLength": 477,
+          "imaginationLength": 968,
+          "spatialMentions": 12,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 1
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 568,
+          "imaginationLength": 1907,
+          "spatialMentions": 10,
+          "cameraVocabulary": 7,
+          "atomicityWarnings": 1
+        },
+        {
+          "shotCount": 5,
+          "promptLength": 445,
+          "imaginationLength": 1580,
+          "spatialMentions": 8,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 4,
+          "promptLength": 439,
+          "imaginationLength": 1834,
+          "spatialMentions": 9,
+          "cameraVocabulary": 4,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 8,
+          "promptLength": 767,
+          "imaginationLength": 720,
+          "spatialMentions": 15,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 6,
+          "promptLength": 502,
+          "imaginationLength": 1493,
+          "spatialMentions": 11,
+          "cameraVocabulary": 5,
+          "atomicityWarnings": 0
+        },
+        {
+          "shotCount": 5,
+          "promptLength": 525,
+          "imaginationLength": 1223,
+          "spatialMentions": 8,
+          "cameraVocabulary": 6,
+          "atomicityWarnings": 0
+        }
+      ]
+    }
+  ]
+}

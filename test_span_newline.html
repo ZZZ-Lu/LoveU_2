@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <div id="container" style="white-space: pre-wrap; font-family: monospace; font-size: 20px; line-height: 40px; padding: 10px;">A
+<span>&#x200b;</span>B
+C</div>
+  <script>
+    const c = document.getElementById('container');
+    const s = c.querySelector('span');
+    console.log("Container top:", c.getBoundingClientRect().top);
+    console.log("Span top:", s.getBoundingClientRect().top);
+  </script>
+</body>
+</html>

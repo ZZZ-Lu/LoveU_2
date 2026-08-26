@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <div id="container" style="white-space: pre-wrap; font-family: monospace; font-size: 20px; line-height: 40px; padding: 10px;">
+<span id="s1">&#x200b;</span>A
+</div>
+  <script>
+    const c = document.getElementById('container');
+    const s1 = document.getElementById('s1');
+    const rectC = c.getBoundingClientRect();
+    const rectS1 = s1.getBoundingClientRect();
+    document.body.innerHTML += `<br>Container top: ${rectC.top}, Span top: ${rectS1.top}, Diff: ${rectS1.top - rectC.top}`;
+  </script>
+</body>
+</html>

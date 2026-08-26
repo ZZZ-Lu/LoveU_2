@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <div id="container" style="white-space: pre-wrap; font-family: monospace; font-size: 15px; line-height: 2.15; padding: 16px;">Segment 1
+
+<span id="s1">&#x200b;</span>【分镜3】
+中景...</div>
+  <script>
+    const c = document.getElementById('container');
+    const s1 = document.getElementById('s1');
+    const rectC = c.getBoundingClientRect();
+    const rectS1 = s1.getBoundingClientRect();
+    document.body.innerHTML += `<br>Span top offset: ${rectS1.top - rectC.top}`;
+  </script>
+</body>
+</html>

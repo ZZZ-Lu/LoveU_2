@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  .test {
+    font-size: 15px;
+    line-height: 2.15;
+    font-family: monospace; /* Whatever font is used */
+  }
+  .highlight {
+    background: rgba(111, 159, 141, 0.48);
+    padding: 8.625px 0;
+    margin: -8.625px 0;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+</style>
+</head>
+<body>
+  <div class="test">
+    Line 1<br>
+    <span class="highlight" id="span">Highlighted</span><br>
+    Line 3
+  </div>
+  <script>
+    const span = document.getElementById('span');
+    document.body.innerHTML += `<br>Span height: ${span.getBoundingClientRect().height}`;
+  </script>
+</body>
+</html>

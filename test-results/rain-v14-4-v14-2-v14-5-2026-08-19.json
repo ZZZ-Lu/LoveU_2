@@ -1,0 +1,281 @@
+{
+  "case": "雨夜拦车",
+  "results": {
+    "V7-2仿V14-4": [
+      {
+        "shotCount": 6,
+        "promptLength": 539,
+        "imaginationLength": 1410,
+        "spatialMentions": 6,
+        "cameraVocabulary": 4,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 6,
+        "promptLength": 446,
+        "imaginationLength": 1638,
+        "spatialMentions": 2,
+        "cameraVocabulary": 5,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 8,
+        "promptLength": 779,
+        "imaginationLength": 2219,
+        "spatialMentions": 5,
+        "cameraVocabulary": 8,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 7,
+        "promptLength": 512,
+        "imaginationLength": 1494,
+        "spatialMentions": 2,
+        "cameraVocabulary": 5,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 8,
+        "promptLength": 535,
+        "imaginationLength": 1208,
+        "spatialMentions": 2,
+        "cameraVocabulary": 5,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 6,
+        "promptLength": 499,
+        "imaginationLength": 1266,
+        "spatialMentions": 4,
+        "cameraVocabulary": 6,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 8,
+        "promptLength": 626,
+        "imaginationLength": 973,
+        "spatialMentions": 3,
+        "cameraVocabulary": 5,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 8,
+        "promptLength": 679,
+        "imaginationLength": 1757,
+        "spatialMentions": 5,
+        "cameraVocabulary": 7,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 5,
+        "promptLength": 377,
+        "imaginationLength": 2172,
+        "spatialMentions": 3,
+        "cameraVocabulary": 6,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 7,
+        "promptLength": 537,
+        "imaginationLength": 1487,
+        "spatialMentions": 4,
+        "cameraVocabulary": 4,
+        "dialogueComplete": false,
+        "atomicityWarnings": 0
+      }
+    ],
+    "V7-2仿V14-2": [
+      {
+        "shotCount": 5,
+        "promptLength": 362,
+        "imaginationLength": 1643,
+        "spatialMentions": 4,
+        "cameraVocabulary": 4,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 9,
+        "promptLength": 749,
+        "imaginationLength": 1968,
+        "spatialMentions": 6,
+        "cameraVocabulary": 8,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 7,
+        "promptLength": 662,
+        "imaginationLength": 1532,
+        "spatialMentions": 5,
+        "cameraVocabulary": 7,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 6,
+        "promptLength": 387,
+        "imaginationLength": 2707,
+        "spatialMentions": 4,
+        "cameraVocabulary": 5,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 9,
+        "promptLength": 585,
+        "imaginationLength": 1104,
+        "spatialMentions": 4,
+        "cameraVocabulary": 5,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 8,
+        "promptLength": 459,
+        "imaginationLength": 2199,
+        "spatialMentions": 5,
+        "cameraVocabulary": 4,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 8,
+        "promptLength": 642,
+        "imaginationLength": 2201,
+        "spatialMentions": 3,
+        "cameraVocabulary": 6,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 9,
+        "promptLength": 515,
+        "imaginationLength": 944,
+        "spatialMentions": 3,
+        "cameraVocabulary": 9,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 9,
+        "promptLength": 629,
+        "imaginationLength": 1592,
+        "spatialMentions": 3,
+        "cameraVocabulary": 7,
+        "dialogueComplete": true,
+        "atomicityWarnings": 1
+      },
+      {
+        "shotCount": 8,
+        "promptLength": 558,
+        "imaginationLength": 1882,
+        "spatialMentions": 7,
+        "cameraVocabulary": 5,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      }
+    ],
+    "V14-5": [
+      {
+        "shotCount": 8,
+        "promptLength": 521,
+        "imaginationLength": 936,
+        "spatialMentions": 4,
+        "cameraVocabulary": 4,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 9,
+        "promptLength": 478,
+        "imaginationLength": 1893,
+        "spatialMentions": 3,
+        "cameraVocabulary": 5,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 6,
+        "promptLength": 422,
+        "imaginationLength": 910,
+        "spatialMentions": 2,
+        "cameraVocabulary": 5,
+        "dialogueComplete": true,
+        "atomicityWarnings": 1
+      },
+      {
+        "shotCount": 8,
+        "promptLength": 567,
+        "imaginationLength": 1107,
+        "spatialMentions": 10,
+        "cameraVocabulary": 6,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 9,
+        "promptLength": 568,
+        "imaginationLength": 1180,
+        "spatialMentions": 6,
+        "cameraVocabulary": 5,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 11,
+        "promptLength": 647,
+        "imaginationLength": 803,
+        "spatialMentions": 6,
+        "cameraVocabulary": 5,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 8,
+        "promptLength": 483,
+        "imaginationLength": 1398,
+        "spatialMentions": 6,
+        "cameraVocabulary": 4,
+        "dialogueComplete": true,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 9,
+        "promptLength": 603,
+        "imaginationLength": 1281,
+        "spatialMentions": 8,
+        "cameraVocabulary": 5,
+        "dialogueComplete": false,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 9,
+        "promptLength": 507,
+        "imaginationLength": 1118,
+        "spatialMentions": 6,
+        "cameraVocabulary": 4,
+        "dialogueComplete": false,
+        "atomicityWarnings": 0
+      },
+      {
+        "shotCount": 8,
+        "promptLength": 602,
+        "imaginationLength": 1229,
+        "spatialMentions": 3,
+        "cameraVocabulary": 6,
+        "dialogueComplete": false,
+        "atomicityWarnings": 0
+      }
+    ]
+  }
+}

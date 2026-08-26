@@ -1,0 +1,347 @@
+{
+  "generatedAt": "2026-08-18T13:51:33.846Z",
+  "summary": [
+    {
+      "caseId": "left_right_flip",
+      "passed": 10,
+      "runs": 10
+    },
+    {
+      "caseId": "facing_flip",
+      "passed": 10,
+      "runs": 10
+    },
+    {
+      "caseId": "prop_jump",
+      "passed": 0,
+      "runs": 10
+    },
+    {
+      "caseId": "exit_jump",
+      "passed": 9,
+      "runs": 10
+    }
+  ],
+  "results": [
+    {
+      "caseId": "left_right_flip",
+      "run": 1,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位，二人没有移动，画面左侧【沈淮青】看向画面右侧【姜蘅之】。\"}]}",
+      "durationMs": 1670
+    },
+    {
+      "caseId": "left_right_flip",
+      "run": 2,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位，二人没有移动，画面左侧【沈淮青】看向画面右侧【姜蘅之】。\"}]}",
+      "durationMs": 1253
+    },
+    {
+      "caseId": "left_right_flip",
+      "run": 3,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位，二人没有移动，画面左侧【沈淮青】看向画面右侧【姜蘅之】。\"}]}",
+      "durationMs": 1403
+    },
+    {
+      "caseId": "left_right_flip",
+      "run": 4,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\n同一机位，二人没有移动，画面左侧【沈淮青】看向画面右侧【姜蘅之】。\"}]}",
+      "durationMs": 1514
+    },
+    {
+      "caseId": "left_right_flip",
+      "run": 5,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位，二人没有移动，画面左侧【沈淮青】看向画面右侧【姜蘅之】。\"}]}",
+      "durationMs": 1284
+    },
+    {
+      "caseId": "left_right_flip",
+      "run": 6,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位，二人没有移动，画面左侧【沈淮青】看向画面右侧【姜蘅之】。\"}]}",
+      "durationMs": 1437
+    },
+    {
+      "caseId": "left_right_flip",
+      "run": 7,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位，二人没有移动，画面左侧【沈淮青】看向画面右侧【姜蘅之】。\"}]}",
+      "durationMs": 1707
+    },
+    {
+      "caseId": "left_right_flip",
+      "run": 8,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位，二人没有移动，画面左侧【沈淮青】看向画面右侧【姜蘅之】。\"}]}",
+      "durationMs": 736
+    },
+    {
+      "caseId": "left_right_flip",
+      "run": 9,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位，二人没有移动，画面左侧【沈淮青】看向画面右侧【姜蘅之】。\"}]}",
+      "durationMs": 716
+    },
+    {
+      "caseId": "left_right_flip",
+      "run": 10,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位，二人没有移动，画面左侧【沈淮青】看向画面右侧【姜蘅之】。\"}]}",
+      "durationMs": 1119
+    },
+    {
+      "caseId": "facing_flip",
+      "run": 1,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位，左侧【沈淮青】面向右侧，右侧【姜蘅之】面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 1404
+    },
+    {
+      "caseId": "facing_flip",
+      "run": 2,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位，左侧【沈淮青】面向右侧，右侧【姜蘅之】面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 1226
+    },
+    {
+      "caseId": "facing_flip",
+      "run": 3,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位，左侧【沈淮青】面向右侧，右侧【姜蘅之】面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 980
+    },
+    {
+      "caseId": "facing_flip",
+      "run": 4,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位，左侧【沈淮青】面向右侧，右侧【姜蘅之】面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 1037
+    },
+    {
+      "caseId": "facing_flip",
+      "run": 5,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位，左侧【沈淮青】面向右侧，右侧【姜蘅之】面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 931
+    },
+    {
+      "caseId": "facing_flip",
+      "run": 6,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位，左侧【沈淮青】面向右侧，右侧【姜蘅之】面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 1110
+    },
+    {
+      "caseId": "facing_flip",
+      "run": 7,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位，左侧【沈淮青】面向右侧，右侧【姜蘅之】面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 856
+    },
+    {
+      "caseId": "facing_flip",
+      "run": 8,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位，左侧【沈淮青】面向右侧，右侧【姜蘅之】面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 677
+    },
+    {
+      "caseId": "facing_flip",
+      "run": 9,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位，左侧【沈淮青】面向右侧，右侧【姜蘅之】面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 713
+    },
+    {
+      "caseId": "facing_flip",
+      "run": 10,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位，左侧【沈淮青】面向右侧，右侧【姜蘅之】面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 743
+    },
+    {
+      "caseId": "prop_jump",
+      "run": 1,
+      "status": 200,
+      "passed": false,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n二人没有接触或交接，左侧【沈淮青】看着她，右侧【姜蘅之】右手仍拿着玉佩。\"}]}",
+      "durationMs": 925
+    },
+    {
+      "caseId": "prop_jump",
+      "run": 2,
+      "status": 200,
+      "passed": false,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n二人没有接触或交接，左侧【沈淮青】看着她，右侧【姜蘅之】右手仍拿着玉佩。\"}]}",
+      "durationMs": 1212
+    },
+    {
+      "caseId": "prop_jump",
+      "run": 3,
+      "status": 200,
+      "passed": false,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n二人没有接触或交接，左侧【沈淮青】看着她，右侧【姜蘅之】右手仍拿着玉佩。\"}]}",
+      "durationMs": 1055
+    },
+    {
+      "caseId": "prop_jump",
+      "run": 4,
+      "status": 200,
+      "passed": false,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n二人没有接触或交接，左侧【沈淮青】看着她，右侧【姜蘅之】右手仍拿着玉佩。\"}]}",
+      "durationMs": 997
+    },
+    {
+      "caseId": "prop_jump",
+      "run": 5,
+      "status": 200,
+      "passed": false,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n二人没有接触或交接，左侧【沈淮青】看着她，右侧【姜蘅之】右手拿着同一枚玉佩。\"}]}",
+      "durationMs": 866
+    },
+    {
+      "caseId": "prop_jump",
+      "run": 6,
+      "status": 200,
+      "passed": false,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n二人没有接触或交接，左侧【沈淮青】看着她，右侧【姜蘅之】右手仍拿着玉佩。\"}]}",
+      "durationMs": 941
+    },
+    {
+      "caseId": "prop_jump",
+      "run": 7,
+      "status": 200,
+      "passed": false,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n二人没有接触或交接，左侧【沈淮青】空手看着她，右侧【姜蘅之】右手拿着同一枚玉佩。\"}]}",
+      "durationMs": 1146
+    },
+    {
+      "caseId": "prop_jump",
+      "run": 8,
+      "status": 200,
+      "passed": false,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n二人没有接触或交接，左侧【沈淮青】看着她，右侧【姜蘅之】右手仍拿着玉佩。\"}]}",
+      "durationMs": 2790
+    },
+    {
+      "caseId": "prop_jump",
+      "run": 9,
+      "status": 200,
+      "passed": false,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n二人没有接触或交接，左侧【沈淮青】空手看着她，右侧【姜蘅之】右手拿着同一枚玉佩。\"}]}",
+      "durationMs": 1225
+    },
+    {
+      "caseId": "prop_jump",
+      "run": 10,
+      "status": 200,
+      "passed": false,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n二人没有接触或交接，左侧【沈淮青】看着她，右侧【姜蘅之】右手拿着同一枚玉佩。\"}]}",
+      "durationMs": 812
+    },
+    {
+      "caseId": "exit_jump",
+      "run": 1,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一固定机位，没人离场也没有遮挡，【林菀儿】仍站在门内右侧。\"}]}",
+      "durationMs": 1085
+    },
+    {
+      "caseId": "exit_jump",
+      "run": 2,
+      "status": 200,
+      "passed": false,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一固定机位，没人离场也没有遮挡，门内右侧站着林菀儿。\"}]}",
+      "durationMs": 704
+    },
+    {
+      "caseId": "exit_jump",
+      "run": 3,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一固定机位，没人离场也没有遮挡，【林菀儿】仍站在门内右侧。\"}]}",
+      "durationMs": 681
+    },
+    {
+      "caseId": "exit_jump",
+      "run": 4,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一固定机位，没人离场也没有遮挡，【林菀儿】仍站在门内右侧。\"}]}",
+      "durationMs": 765
+    },
+    {
+      "caseId": "exit_jump",
+      "run": 5,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一固定机位，没人离场也没有遮挡，【林菀儿】仍站在门内右侧。\"}]}",
+      "durationMs": 844
+    },
+    {
+      "caseId": "exit_jump",
+      "run": 6,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一固定机位，没人离场也没有遮挡，【林菀儿】仍站在门内右侧。\"}]}",
+      "durationMs": 946
+    },
+    {
+      "caseId": "exit_jump",
+      "run": 7,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一固定机位，没人离场也没有遮挡，【林菀儿】仍站在门内右侧。\"}]}",
+      "durationMs": 1123
+    },
+    {
+      "caseId": "exit_jump",
+      "run": 8,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一固定机位，没人离场也没有遮挡，【林菀儿】仍站在门内右侧。\"}]}",
+      "durationMs": 898
+    },
+    {
+      "caseId": "exit_jump",
+      "run": 9,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一固定机位，没人离场也没有遮挡，【林菀儿】仍站在门内右侧。\"}]}",
+      "durationMs": 1294
+    },
+    {
+      "caseId": "exit_jump",
+      "run": 10,
+      "status": 200,
+      "passed": true,
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一固定机位，没人离场也没有遮挡，【林菀儿】仍站在门内右侧。\"}]}",
+      "durationMs": 1119
+    }
+  ]
+}

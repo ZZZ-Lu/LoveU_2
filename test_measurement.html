@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <textarea id="ta" style="width: 400px; padding: 16px; font-size: 15px; line-height: 2.15; box-sizing: border-box; white-space: pre-wrap; font-family: sans-serif;"></textarea>
+  <script>
+    const ta = document.getElementById('ta');
+    const text = "【分镜3】\n中景，快速横摇镜头扫过厅堂两侧众宾客，他们脸上惊恐未退，有人捂嘴、有人后退半步、有人瞪大眼睛看着地上";
+    ta.value = text;
+    
+    const style = window.getComputedStyle(ta);
+    const mirror = document.createElement("div");
+    Object.assign(mirror.style, {
+      position: "fixed", visibility: "hidden", pointerEvents: "none",
+      left: "0", top: "0", width: `${ta.clientWidth}px`, height: "auto", overflow: "hidden",
+      boxSizing: "border-box", padding: style.padding, font: style.font, fontFamily: style.fontFamily,
+      fontSize: style.fontSize, fontWeight: style.fontWeight, fontStyle: style.fontStyle,
+      lineHeight: style.lineHeight, letterSpacing: style.letterSpacing, textTransform: style.textTransform,
+      textIndent: style.textIndent, textAlign: style.textAlign, whiteSpace: "pre-wrap",
+      overflowWrap: style.overflowWrap, wordBreak: style.wordBreak, tabSize: style.tabSize,
+    });
+    
+    // Test match
+    const marker = /【分镜\s*(\d+)\s*】/g;
+    let match;
+    const positions = [];
+    while ((match = marker.exec(text)) !== null) {
+      positions.push(match.index);
+    }
+    
+    let cursor = 0;
+    positions.forEach((position) => {
+      if (position > cursor) mirror.appendChild(document.createTextNode(text.slice(cursor, position)));
+      const markerEl = document.createElement("span");
+      markerEl.textContent = "\u200b";
+      markerEl.className = "marker";
+      mirror.appendChild(markerEl);
+      cursor = position;
+    });
+    if (cursor < text.length) mirror.appendChild(document.createTextNode(text.slice(cursor)));
+    document.body.appendChild(mirror);
+    
+    const mirrorTop = mirror.getBoundingClientRect().top;
+    const markerEl = mirror.querySelector('.marker');
+    console.log("Match index:", positions[0]);
+    console.log("Marker top:", markerEl.getBoundingClientRect().top - mirrorTop);
+    
+    const firstCharSpan = document.createElement('span');
+    firstCharSpan.textContent = "【";
+    mirror.insertBefore(firstCharSpan, mirror.firstChild);
+    console.log("First char top:", firstCharSpan.getBoundingClientRect().top - mirrorTop);
+  </script>
+</body>
+</html>

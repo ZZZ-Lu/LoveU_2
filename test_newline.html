@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <div id="container" style="white-space: pre-wrap; font-family: monospace;">
+    <script>
+      const c = document.getElementById('container');
+      c.appendChild(document.createTextNode("Line 1\n\n"));
+      
+      const s1 = document.createElement('span');
+      s1.textContent = "S1";
+      s1.style.background = "red";
+      c.appendChild(s1);
+
+      c.appendChild(document.createTextNode("Line 3\n"));
+      
+      const s2 = document.createElement('span');
+      s2.textContent = "S2";
+      s2.style.background = "blue";
+      c.appendChild(s2);
+    </script>
+  </div>
+</body>
+</html>

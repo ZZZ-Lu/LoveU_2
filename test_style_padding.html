@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <div id="test" style="padding: 16px 18px 40px;"></div>
+  <script>
+    const el = document.getElementById('test');
+    const style = window.getComputedStyle(el);
+    document.body.innerHTML += `<br>padding: "${style.padding}", paddingTop: "${style.paddingTop}"`;
+  </script>
+</body>
+</html>

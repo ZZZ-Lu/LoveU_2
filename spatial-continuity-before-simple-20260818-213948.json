@@ -1,0 +1,1736 @@
+{
+  "generatedAt": "2026-08-18T13:31:08.677Z",
+  "summary": [
+    {
+      "caseId": "missing_multi_subject_relation",
+      "label": "多人同镜缺少相对位置（应补全）",
+      "expected": "changed",
+      "runs": 7,
+      "valid": 7,
+      "changed": 3,
+      "passed": 3,
+      "averageDurationMs": 1195
+    },
+    {
+      "caseId": "missing_foreground_background",
+      "label": "双人镜头未交代前后层次（应补全）",
+      "expected": "changed",
+      "runs": 13,
+      "valid": 12,
+      "changed": 5,
+      "passed": 5,
+      "averageDurationMs": 1346
+    },
+    {
+      "caseId": "single_subject_complete",
+      "label": "单人特写已完整（不应机械补位置）",
+      "expected": "unchanged",
+      "runs": 7,
+      "valid": 7,
+      "changed": 0,
+      "passed": 7,
+      "averageDurationMs": 1054
+    },
+    {
+      "caseId": "control_continuous",
+      "label": "正常连续（不应修改）",
+      "expected": "unchanged",
+      "runs": 17,
+      "valid": 17,
+      "changed": 0,
+      "passed": 17,
+      "averageDurationMs": 888
+    },
+    {
+      "caseId": "left_right_flip",
+      "label": "左右位置无交代翻转",
+      "expected": "changed",
+      "runs": 17,
+      "valid": 17,
+      "changed": 16,
+      "passed": 16,
+      "averageDurationMs": 1167
+    },
+    {
+      "caseId": "facing_flip",
+      "label": "朝向无交代翻转",
+      "expected": "changed",
+      "runs": 14,
+      "valid": 14,
+      "changed": 14,
+      "passed": 14,
+      "averageDurationMs": 1132
+    },
+    {
+      "caseId": "prop_jump",
+      "label": "道具归属无交接跳变",
+      "expected": "changed",
+      "runs": 14,
+      "valid": 14,
+      "changed": 14,
+      "passed": 14,
+      "averageDurationMs": 1016
+    },
+    {
+      "caseId": "entrance_jump",
+      "label": "人物出入画无交代跳变",
+      "expected": "changed",
+      "runs": 14,
+      "valid": 14,
+      "changed": 10,
+      "passed": 10,
+      "averageDurationMs": 989
+    }
+  ],
+  "results": [
+    {
+      "caseId": "control_continuous",
+      "label": "正常连续（不应修改）",
+      "run": 1,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 901
+    },
+    {
+      "caseId": "control_continuous",
+      "label": "正常连续（不应修改）",
+      "run": 2,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 699
+    },
+    {
+      "caseId": "control_continuous",
+      "label": "正常连续（不应修改）",
+      "run": 3,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 721
+    },
+    {
+      "caseId": "control_continuous",
+      "label": "正常连续（不应修改）",
+      "run": 4,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 716
+    },
+    {
+      "caseId": "control_continuous",
+      "label": "正常连续（不应修改）",
+      "run": 5,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 716
+    },
+    {
+      "caseId": "control_continuous",
+      "label": "正常连续（不应修改）",
+      "run": 6,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 703
+    },
+    {
+      "caseId": "control_continuous",
+      "label": "正常连续（不应修改）",
+      "run": 7,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 661
+    },
+    {
+      "caseId": "control_continuous",
+      "label": "正常连续（不应修改）",
+      "run": 8,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 686
+    },
+    {
+      "caseId": "control_continuous",
+      "label": "正常连续（不应修改）",
+      "run": 9,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 795
+    },
+    {
+      "caseId": "control_continuous",
+      "label": "正常连续（不应修改）",
+      "run": 10,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 847
+    },
+    {
+      "caseId": "left_right_flip",
+      "label": "左右位置无交代翻转",
+      "run": 1,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位的近景，画面左侧【沈淮青】仍面向右侧的【姜蘅之】，姜蘅之说道：“你想清楚了吗？”二人之间没有移动或换位。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位的近景，画面左侧【沈淮青】仍面向右侧的【姜蘅之】，姜蘅之说道：“你想清楚了吗？”二人之间没有移动或换位。\"}]}",
+      "durationMs": 859
+    },
+    {
+      "caseId": "left_right_flip",
+      "label": "左右位置无交代翻转",
+      "run": 2,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位的近景，画面左侧【沈淮青】仍面向右侧的【姜蘅之】，姜蘅之说道：“你想清楚了吗？”二人之间没有移动或换位。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位的近景，画面左侧【沈淮青】仍面向右侧的【姜蘅之】，姜蘅之说道：“你想清楚了吗？”二人之间没有移动或换位。\"}]}",
+      "durationMs": 952
+    },
+    {
+      "caseId": "left_right_flip",
+      "label": "左右位置无交代翻转",
+      "run": 3,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位的近景，画面左侧【沈淮青】仍面向右侧的【姜蘅之】，姜蘅之说道：“你想清楚了吗？”二人之间没有移动或换位。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位的近景，画面左侧【沈淮青】仍面向右侧的【姜蘅之】，姜蘅之说道：“你想清楚了吗？”二人之间没有移动或换位。\"}]}",
+      "durationMs": 1140
+    },
+    {
+      "caseId": "left_right_flip",
+      "label": "左右位置无交代翻转",
+      "run": 4,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位的近景，画面左侧【沈淮青】仍面向右侧的【姜蘅之】，姜蘅之说道：“你想清楚了吗？”二人之间没有移动或换位。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位的近景，画面左侧【沈淮青】仍面向右侧的【姜蘅之】，姜蘅之说道：“你想清楚了吗？”二人之间没有移动或换位。\"}]}",
+      "durationMs": 1069
+    },
+    {
+      "caseId": "left_right_flip",
+      "label": "左右位置无交代翻转",
+      "run": 5,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\n同一机位的近景，画面左侧【沈淮青】仍面向右侧的【姜蘅之】，姜蘅之说道：“你想清楚了吗？”二人之间没有移动或换位。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\n同一机位的近景，画面左侧【沈淮青】仍面向右侧的【姜蘅之】，姜蘅之说道：“你想清楚了吗？”二人之间没有移动或换位。\"}]}",
+      "durationMs": 1056
+    },
+    {
+      "caseId": "left_right_flip",
+      "label": "左右位置无交代翻转",
+      "run": 6,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位的近景，画面左侧【沈淮青】仍面向右侧的【姜蘅之】，姜蘅之说道：“你想清楚了吗？”二人之间没有移动或换位。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位的近景，画面左侧【沈淮青】仍面向右侧的【姜蘅之】，姜蘅之说道：“你想清楚了吗？”二人之间没有移动或换位。\"}]}",
+      "durationMs": 1010
+    },
+    {
+      "caseId": "left_right_flip",
+      "label": "左右位置无交代翻转",
+      "run": 7,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位的近景，画面左侧【沈淮青】仍面向右侧的【姜蘅之】，姜蘅之说道：“你想清楚了吗？”二人之间没有移动或换位。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位的近景，画面左侧【沈淮青】仍面向右侧的【姜蘅之】，姜蘅之说道：“你想清楚了吗？”二人之间没有移动或换位。\"}]}",
+      "durationMs": 1079
+    },
+    {
+      "caseId": "left_right_flip",
+      "label": "左右位置无交代翻转",
+      "run": 8,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位的近景，画面左侧【沈淮青】仍面向右侧的【姜蘅之】，姜蘅之说道：“你想清楚了吗？”二人之间没有移动或换位。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位的近景，画面左侧【沈淮青】仍面向右侧的【姜蘅之】，姜蘅之说道：“你想清楚了吗？”二人之间没有移动或换位。\"}]}",
+      "durationMs": 1804
+    },
+    {
+      "caseId": "left_right_flip",
+      "label": "左右位置无交代翻转",
+      "run": 9,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位的近景，画面左侧【沈淮青】仍面向右侧的【姜蘅之】，姜蘅之说道：“你想清楚了吗？”二人之间没有移动或换位。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位的近景，画面左侧【沈淮青】仍面向右侧的【姜蘅之】，姜蘅之说道：“你想清楚了吗？”二人之间没有移动或换位。\"}]}",
+      "durationMs": 1226
+    },
+    {
+      "caseId": "left_right_flip",
+      "label": "左右位置无交代翻转",
+      "run": 10,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位的近景，画面左侧【沈淮青】仍面向右侧的【姜蘅之】，姜蘅之说道：“你想清楚了吗？”二人之间没有移动或换位。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位的近景，画面左侧【沈淮青】仍面向右侧的【姜蘅之】，姜蘅之说道：“你想清楚了吗？”二人之间没有移动或换位。\"}]}",
+      "durationMs": 996
+    },
+    {
+      "caseId": "facing_flip",
+      "label": "朝向无交代翻转",
+      "run": 1,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】仍面向左侧看着【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】仍面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 1235
+    },
+    {
+      "caseId": "facing_flip",
+      "label": "朝向无交代翻转",
+      "run": 2,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】仍面向左侧看着【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】仍面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 1119
+    },
+    {
+      "caseId": "facing_flip",
+      "label": "朝向无交代翻转",
+      "run": 3,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】仍面向左侧看着【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】仍面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 961
+    },
+    {
+      "caseId": "facing_flip",
+      "label": "朝向无交代翻转",
+      "run": 4,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】仍面向左侧看着【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】仍面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 969
+    },
+    {
+      "caseId": "facing_flip",
+      "label": "朝向无交代翻转",
+      "run": 5,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】仍面向左侧看着【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】仍面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 1059
+    },
+    {
+      "caseId": "facing_flip",
+      "label": "朝向无交代翻转",
+      "run": 6,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】仍面向左侧看着【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】仍面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 946
+    },
+    {
+      "caseId": "facing_flip",
+      "label": "朝向无交代翻转",
+      "run": 7,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】仍面向左侧看着【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】仍面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 1145
+    },
+    {
+      "caseId": "facing_flip",
+      "label": "朝向无交代翻转",
+      "run": 8,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】仍面向左侧看着【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】仍面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 1129
+    },
+    {
+      "caseId": "facing_flip",
+      "label": "朝向无交代翻转",
+      "run": 9,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】仍面向左侧看着【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】仍面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 1438
+    },
+    {
+      "caseId": "facing_flip",
+      "label": "朝向无交代翻转",
+      "run": 10,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】仍面向左侧看着【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】仍面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 1114
+    },
+    {
+      "caseId": "prop_jump",
+      "label": "道具归属无交接跳变",
+      "run": 1,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】空手看着他，画面右侧【姜蘅之】右手捏着同一枚玉佩。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】空手看着他，画面右侧【姜蘅之】右手捏着同一枚玉佩。\"}]}",
+      "durationMs": 966
+    },
+    {
+      "caseId": "prop_jump",
+      "label": "道具归属无交接跳变",
+      "run": 2,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】空手看着他，画面右侧【姜蘅之】右手捏着玉佩。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】空手看着他，画面右侧【姜蘅之】右手捏着玉佩。\"}]}",
+      "durationMs": 740
+    },
+    {
+      "caseId": "prop_jump",
+      "label": "道具归属无交接跳变",
+      "run": 3,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】空手看着他，画面右侧【姜蘅之】右手捏着玉佩。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】空手看着他，画面右侧【姜蘅之】右手捏着玉佩。\"}]}",
+      "durationMs": 1102
+    },
+    {
+      "caseId": "prop_jump",
+      "label": "道具归属无交接跳变",
+      "run": 4,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】空手看着他，画面右侧【姜蘅之】右手捏着玉佩。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】空手看着他，画面右侧【姜蘅之】右手捏着玉佩。\"}]}",
+      "durationMs": 987
+    },
+    {
+      "caseId": "prop_jump",
+      "label": "道具归属无交接跳变",
+      "run": 5,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】空手看着他，画面右侧【姜蘅之】右手捏着同一枚玉佩。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】空手看着他，画面右侧【姜蘅之】右手捏着同一枚玉佩。\"}]}",
+      "durationMs": 1131
+    },
+    {
+      "caseId": "prop_jump",
+      "label": "道具归属无交接跳变",
+      "run": 6,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】空手看着他，画面右侧【姜蘅之】右手捏着同一枚玉佩。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】空手看着他，画面右侧【姜蘅之】右手捏着同一枚玉佩。\"}]}",
+      "durationMs": 800
+    },
+    {
+      "caseId": "prop_jump",
+      "label": "道具归属无交接跳变",
+      "run": 7,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】空手看着他，画面右侧【姜蘅之】右手捏着玉佩。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】空手看着他，画面右侧【姜蘅之】右手捏着玉佩。\"}]}",
+      "durationMs": 911
+    },
+    {
+      "caseId": "prop_jump",
+      "label": "道具归属无交接跳变",
+      "run": 8,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】空手看着他，画面右侧【姜蘅之】右手捏着玉佩。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】空手看着他，画面右侧【姜蘅之】右手捏着玉佩。\"}]}",
+      "durationMs": 985
+    },
+    {
+      "caseId": "prop_jump",
+      "label": "道具归属无交接跳变",
+      "run": 9,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】空手，画面右侧【姜蘅之】右手捏着玉佩看着他。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】空手，画面右侧【姜蘅之】右手捏着玉佩看着他。\"}]}",
+      "durationMs": 1187
+    },
+    {
+      "caseId": "prop_jump",
+      "label": "道具归属无交接跳变",
+      "run": 10,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】空手看着他，画面右侧【姜蘅之】右手捏着同一枚玉佩。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】空手看着他，画面右侧【姜蘅之】右手捏着同一枚玉佩。\"}]}",
+      "durationMs": 957
+    },
+    {
+      "caseId": "entrance_jump",
+      "label": "人物出入画无交代跳变",
+      "run": 1,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位中景，画面右侧房门前【林菀儿】仍站在门内右侧，望向画面左侧的【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位中景，画面右侧房门前【林菀儿】仍站在门内右侧，望向画面左侧的【沈淮青】。\"}]}",
+      "durationMs": 885
+    },
+    {
+      "caseId": "entrance_jump",
+      "label": "人物出入画无交代跳变",
+      "run": 2,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位中景，画面右侧房门前【林菀儿】仍站在门内右侧，望向画面左侧的【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位中景，画面右侧房门前【林菀儿】仍站在门内右侧，望向画面左侧的【沈淮青】。\"}]}",
+      "durationMs": 843
+    },
+    {
+      "caseId": "entrance_jump",
+      "label": "人物出入画无交代跳变",
+      "run": 3,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位中景，画面右侧房门前【林菀儿】仍站在门内右侧，望向画面左侧的【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位中景，画面右侧房门前【林菀儿】仍站在门内右侧，望向画面左侧的【沈淮青】。\"}]}",
+      "durationMs": 986
+    },
+    {
+      "caseId": "entrance_jump",
+      "label": "人物出入画无交代跳变",
+      "run": 4,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位中景，画面右侧房门前【林菀儿】仍站在门内右侧，望向画面左侧的【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位中景，画面右侧房门前【林菀儿】仍站在门内右侧，望向画面左侧的【沈淮青】。\"}]}",
+      "durationMs": 964
+    },
+    {
+      "caseId": "entrance_jump",
+      "label": "人物出入画无交代跳变",
+      "run": 5,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位中景，画面右侧房门前【林菀儿】仍站在门内右侧，望向画面左侧的【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位中景，画面右侧房门前【林菀儿】仍站在门内右侧，望向画面左侧的【沈淮青】。\"}]}",
+      "durationMs": 751
+    },
+    {
+      "caseId": "entrance_jump",
+      "label": "人物出入画无交代跳变",
+      "run": 6,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位中景，画面右侧房门前【林菀儿】仍站在门内右侧，望向画面左侧的【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位中景，画面右侧房门前【林菀儿】仍站在门内右侧，望向画面左侧的【沈淮青】。\"}]}",
+      "durationMs": 773
+    },
+    {
+      "caseId": "entrance_jump",
+      "label": "人物出入画无交代跳变",
+      "run": 7,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\n同一机位中景，画面右侧房门前【林菀儿】仍站在门内右侧，望向画面左侧的【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\n同一机位中景，画面右侧房门前【林菀儿】仍站在门内右侧，望向画面左侧的【沈淮青】。\"}]}",
+      "durationMs": 924
+    },
+    {
+      "caseId": "entrance_jump",
+      "label": "人物出入画无交代跳变",
+      "run": 8,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位中景，画面右侧房门前【林菀儿】仍站在门内右侧，望向画面左侧的【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位中景，画面右侧房门前【林菀儿】仍站在门内右侧，望向画面左侧的【沈淮青】。\"}]}",
+      "durationMs": 1110
+    },
+    {
+      "caseId": "entrance_jump",
+      "label": "人物出入画无交代跳变",
+      "run": 9,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位中景，画面右侧房门前【林菀儿】仍站在门内右侧，望向画面左侧的【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位中景，画面右侧房门前【林菀儿】仍站在门内右侧，望向画面左侧的【沈淮青】。\"}]}",
+      "durationMs": 1034
+    },
+    {
+      "caseId": "entrance_jump",
+      "label": "人物出入画无交代跳变",
+      "run": 10,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位中景，【林菀儿】仍站在画面右侧房门内侧，望向画面左侧的【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位中景，【林菀儿】仍站在画面右侧房门内侧，望向画面左侧的【沈淮青】。\"}]}",
+      "durationMs": 1113
+    },
+    {
+      "caseId": "missing_multi_subject_relation",
+      "label": "多人同镜缺少相对位置（应补全）",
+      "run": 101,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": false,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1295
+    },
+    {
+      "caseId": "missing_foreground_background",
+      "label": "过肩关系未交代画面层次（应补全）",
+      "run": 101,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": false,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 3690
+    },
+    {
+      "caseId": "single_subject_complete",
+      "label": "单人特写已完整（不应机械补位置）",
+      "run": 101,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1130
+    },
+    {
+      "caseId": "control_continuous",
+      "label": "正常连续（不应修改）",
+      "run": 101,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1008
+    },
+    {
+      "caseId": "left_right_flip",
+      "label": "左右位置无交代翻转",
+      "run": 101,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": false,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 982
+    },
+    {
+      "caseId": "facing_flip",
+      "label": "朝向无交代翻转",
+      "run": 101,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】面向左侧看着【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 1210
+    },
+    {
+      "caseId": "prop_jump",
+      "label": "道具归属无交接跳变",
+      "run": 101,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】右手捏着同一枚玉佩，画面右侧【姜蘅之】空手看着他。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】右手捏着同一枚玉佩，画面右侧【姜蘅之】空手看着他。\"}]}",
+      "durationMs": 1059
+    },
+    {
+      "caseId": "entrance_jump",
+      "label": "人物出入画无交代跳变",
+      "run": 101,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": false,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1018
+    },
+    {
+      "caseId": "missing_multi_subject_relation",
+      "label": "多人同镜缺少相对位置（应补全）",
+      "run": 201,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 1,
+          "replacement": "【分镜1】\\n中景，沈淮青与姜蘅之隔着书案相对而立，沈淮青神情紧绷地说道：“你想清楚了吗？”姜蘅之冷冷看着他。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":1,\"replacement\":\"【分镜1】\\\\n中景，沈淮青与姜蘅之隔着书案相对而立，沈淮青神情紧绷地说道：“你想清楚了吗？”姜蘅之冷冷看着他。\"}]}",
+      "durationMs": 900
+    },
+    {
+      "caseId": "missing_multi_subject_relation",
+      "label": "多人同镜缺少相对位置（应补全）",
+      "run": 202,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 1,
+          "replacement": "【分镜1】\\n中景，沈淮青与姜蘅之隔着书案相对而立，沈淮青神情紧绷地说道：“你想清楚了吗？”姜蘅之冷冷看着他。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":1,\"replacement\":\"【分镜1】\\\\n中景，沈淮青与姜蘅之隔着书案相对而立，沈淮青神情紧绷地说道：“你想清楚了吗？”姜蘅之冷冷看着他。\"}]}",
+      "durationMs": 1292
+    },
+    {
+      "caseId": "missing_multi_subject_relation",
+      "label": "多人同镜缺少相对位置（应补全）",
+      "run": 203,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 1,
+          "replacement": "【分镜1】\\n中景，沈淮青与姜蘅之隔着书案相对而立，沈淮青神情紧绷地说道：“你想清楚了吗？”姜蘅之冷冷看着他。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":1,\"replacement\":\"【分镜1】\\\\n中景，沈淮青与姜蘅之隔着书案相对而立，沈淮青神情紧绷地说道：“你想清楚了吗？”姜蘅之冷冷看着他。\"}]}",
+      "durationMs": 810
+    },
+    {
+      "caseId": "missing_foreground_background",
+      "label": "过肩关系未交代画面层次（应补全）",
+      "run": 201,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": false,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 520
+    },
+    {
+      "caseId": "missing_foreground_background",
+      "label": "过肩关系未交代画面层次（应补全）",
+      "run": 202,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": false,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 584
+    },
+    {
+      "caseId": "missing_foreground_background",
+      "label": "过肩关系未交代画面层次（应补全）",
+      "run": 203,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": false,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 885
+    },
+    {
+      "caseId": "single_subject_complete",
+      "label": "单人特写已完整（不应机械补位置）",
+      "run": 201,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1290
+    },
+    {
+      "caseId": "single_subject_complete",
+      "label": "单人特写已完整（不应机械补位置）",
+      "run": 202,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 997
+    },
+    {
+      "caseId": "single_subject_complete",
+      "label": "单人特写已完整（不应机械补位置）",
+      "run": 203,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1049
+    },
+    {
+      "caseId": "control_continuous",
+      "label": "正常连续（不应修改）",
+      "run": 201,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1097
+    },
+    {
+      "caseId": "control_continuous",
+      "label": "正常连续（不应修改）",
+      "run": 202,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1112
+    },
+    {
+      "caseId": "control_continuous",
+      "label": "正常连续（不应修改）",
+      "run": 203,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1286
+    },
+    {
+      "caseId": "left_right_flip",
+      "label": "左右位置无交代翻转",
+      "run": 201,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\n同一机位的近景，画面左侧【姜蘅之】仍面向右侧的【沈淮青】说道：“你想清楚了吗？”二人之间没有移动或换位。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\n同一机位的近景，画面左侧【姜蘅之】仍面向右侧的【沈淮青】说道：“你想清楚了吗？”二人之间没有移动或换位。\"}]}",
+      "durationMs": 1345
+    },
+    {
+      "caseId": "left_right_flip",
+      "label": "左右位置无交代翻转",
+      "run": 202,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\n同一机位的近景，画面左侧【姜蘅之】仍面向右侧的【沈淮青】说道：“你想清楚了吗？”二人之间没有移动或换位。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\n同一机位的近景，画面左侧【姜蘅之】仍面向右侧的【沈淮青】说道：“你想清楚了吗？”二人之间没有移动或换位。\"}]}",
+      "durationMs": 1402
+    },
+    {
+      "caseId": "left_right_flip",
+      "label": "左右位置无交代翻转",
+      "run": 203,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\n同一机位的近景，画面左侧【姜蘅之】仍面向右侧的【沈淮青】说道：“你想清楚了吗？”二人之间没有移动或换位。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\n同一机位的近景，画面左侧【姜蘅之】仍面向右侧的【沈淮青】说道：“你想清楚了吗？”二人之间没有移动或换位。\"}]}",
+      "durationMs": 1383
+    },
+    {
+      "caseId": "missing_foreground_background",
+      "label": "双人镜头未交代前后层次（应补全）",
+      "run": 301,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": false,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1246
+    },
+    {
+      "caseId": "missing_foreground_background",
+      "label": "双人镜头未交代前后层次（应补全）",
+      "run": 302,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": false,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1256
+    },
+    {
+      "caseId": "missing_foreground_background",
+      "label": "双人镜头未交代前后层次（应补全）",
+      "run": 303,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": false,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1269
+    },
+    {
+      "caseId": "missing_foreground_background",
+      "label": "双人镜头未交代前后层次（应补全）",
+      "run": 401,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 1,
+          "replacement": "【分镜1】\n双人近景，【姜蘅之】背对镜头位于前景，【沈淮青】面向她位于背景说道：\"我没有骗你。\""
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":1,\"replacement\":\"【分镜1】\\n双人近景，【姜蘅之】背对镜头位于前景，【沈淮青】面向她位于背景说道：\\\"我没有骗你。\\\"\"}]}",
+      "durationMs": 1742
+    },
+    {
+      "caseId": "missing_foreground_background",
+      "label": "双人镜头未交代前后层次（应补全）",
+      "run": 402,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 1,
+          "replacement": "【分镜1】\n双人近景，【姜蘅之】背对镜头位于前景，【沈淮青】面向她位于背景，说道：\"我没有骗你。\""
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":1,\"replacement\":\"【分镜1】\\n双人近景，【姜蘅之】背对镜头位于前景，【沈淮青】面向她位于背景，说道：\\\"我没有骗你。\\\"\"}]}",
+      "durationMs": 1224
+    },
+    {
+      "caseId": "missing_foreground_background",
+      "label": "双人镜头未交代前后层次（应补全）",
+      "run": 403,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 1,
+          "replacement": "【分镜1】\n双人近景，【姜蘅之】背对镜头位于前景，【沈淮青】面向她位于背景，说道：\"我没有骗你。\""
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":1,\"replacement\":\"【分镜1】\\n双人近景，【姜蘅之】背对镜头位于前景，【沈淮青】面向她位于背景，说道：\\\"我没有骗你。\\\"\"}]}",
+      "durationMs": 997
+    },
+    {
+      "caseId": "missing_multi_subject_relation",
+      "label": "多人同镜缺少相对位置（应补全）",
+      "run": 501,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": false,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1507
+    },
+    {
+      "caseId": "missing_multi_subject_relation",
+      "label": "多人同镜缺少相对位置（应补全）",
+      "run": 502,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": false,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1288
+    },
+    {
+      "caseId": "missing_multi_subject_relation",
+      "label": "多人同镜缺少相对位置（应补全）",
+      "run": 503,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": false,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1271
+    },
+    {
+      "caseId": "missing_foreground_background",
+      "label": "双人镜头未交代前后层次（应补全）",
+      "run": 501,
+      "expected": "changed",
+      "status": 200,
+      "valid": false,
+      "changed": false,
+      "passed": false,
+      "changes": null,
+      "raw": "{\"changes\":[{\"shot\":1,\"replacement\":\"【分镜1】\\n双人近景，【姜蘅之】背对镜头位于前景，【沈淮青】面向她位于背景说道：\"我没有骗你。\"}]}",
+      "durationMs": 1462
+    },
+    {
+      "caseId": "missing_foreground_background",
+      "label": "双人镜头未交代前后层次（应补全）",
+      "run": 502,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 1,
+          "replacement": "【分镜1】\n双人近景，【姜蘅之】背对镜头位于前景，【沈淮青】面向她位于背景说道：\"我没有骗你。\""
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":1,\"replacement\":\"【分镜1】\\n双人近景，【姜蘅之】背对镜头位于前景，【沈淮青】面向她位于背景说道：\\\"我没有骗你。\\\"\"}]}",
+      "durationMs": 1308
+    },
+    {
+      "caseId": "missing_foreground_background",
+      "label": "双人镜头未交代前后层次（应补全）",
+      "run": 503,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 1,
+          "replacement": "【分镜1】\n双人近景，【姜蘅之】背对镜头位于前景，【沈淮青】面向她位于背景说道：\"我没有骗你。\""
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":1,\"replacement\":\"【分镜1】\\n双人近景，【姜蘅之】背对镜头位于前景，【沈淮青】面向她位于背景说道：\\\"我没有骗你。\\\"\"}]}",
+      "durationMs": 1321
+    },
+    {
+      "caseId": "single_subject_complete",
+      "label": "单人特写已完整（不应机械补位置）",
+      "run": 501,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1039
+    },
+    {
+      "caseId": "single_subject_complete",
+      "label": "单人特写已完整（不应机械补位置）",
+      "run": 502,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 938
+    },
+    {
+      "caseId": "single_subject_complete",
+      "label": "单人特写已完整（不应机械补位置）",
+      "run": 503,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 937
+    },
+    {
+      "caseId": "control_continuous",
+      "label": "正常连续（不应修改）",
+      "run": 501,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1025
+    },
+    {
+      "caseId": "control_continuous",
+      "label": "正常连续（不应修改）",
+      "run": 502,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1015
+    },
+    {
+      "caseId": "control_continuous",
+      "label": "正常连续（不应修改）",
+      "run": 503,
+      "expected": "unchanged",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": true,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1109
+    },
+    {
+      "caseId": "left_right_flip",
+      "label": "左右位置无交代翻转",
+      "run": 501,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\n同一机位的近景，画面左侧【姜蘅之】仍面向右侧的【沈淮青】说道：“你想清楚了吗？”二人之间没有移动或换位。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\n同一机位的近景，画面左侧【姜蘅之】仍面向右侧的【沈淮青】说道：“你想清楚了吗？”二人之间没有移动或换位。\"}]}",
+      "durationMs": 1223
+    },
+    {
+      "caseId": "left_right_flip",
+      "label": "左右位置无交代翻转",
+      "run": 502,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\n同一机位的近景，画面左侧【姜蘅之】仍面向右侧的【沈淮青】说道：“你想清楚了吗？”二人之间没有移动或换位。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\n同一机位的近景，画面左侧【姜蘅之】仍面向右侧的【沈淮青】说道：“你想清楚了吗？”二人之间没有移动或换位。\"}]}",
+      "durationMs": 1129
+    },
+    {
+      "caseId": "left_right_flip",
+      "label": "左右位置无交代翻转",
+      "run": 503,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\n同一机位的近景，画面左侧【姜蘅之】仍面向右侧的【沈淮青】说道：“你想清楚了吗？”二人之间没有移动或换位。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\n同一机位的近景，画面左侧【姜蘅之】仍面向右侧的【沈淮青】说道：“你想清楚了吗？”二人之间没有移动或换位。\"}]}",
+      "durationMs": 1188
+    },
+    {
+      "caseId": "facing_flip",
+      "label": "朝向无交代翻转",
+      "run": 501,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】面向左侧看着【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 932
+    },
+    {
+      "caseId": "facing_flip",
+      "label": "朝向无交代翻转",
+      "run": 502,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】面向左侧看着【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 1544
+    },
+    {
+      "caseId": "facing_flip",
+      "label": "朝向无交代翻转",
+      "run": 503,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】却面向左侧看着【沈淮青】。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\n同一机位近景，二人位置不变；画面左侧【沈淮青】仍面向右侧，画面右侧【姜蘅之】却面向左侧看着【沈淮青】。\"}]}",
+      "durationMs": 1053
+    },
+    {
+      "caseId": "prop_jump",
+      "label": "道具归属无交接跳变",
+      "run": 501,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】右手捏着同一枚玉佩，画面右侧【姜蘅之】空手看着他。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】右手捏着同一枚玉佩，画面右侧【姜蘅之】空手看着他。\"}]}",
+      "durationMs": 790
+    },
+    {
+      "caseId": "prop_jump",
+      "label": "道具归属无交接跳变",
+      "run": 502,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】右手捏着同一枚玉佩，画面右侧【姜蘅之】空手看着他。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】右手捏着同一枚玉佩，画面右侧【姜蘅之】空手看着他。\"}]}",
+      "durationMs": 1099
+    },
+    {
+      "caseId": "prop_jump",
+      "label": "道具归属无交接跳变",
+      "run": 503,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": true,
+      "passed": true,
+      "changes": [
+        {
+          "shot": 2,
+          "replacement": "【分镜2】\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】右手捏着同一枚玉佩，画面右侧【姜蘅之】空手看着他。"
+        }
+      ],
+      "raw": "{\"changes\":[{\"shot\":2,\"replacement\":\"【分镜2】\\n中景固定机位，二人没有接触或交接动作；画面左侧【沈淮青】右手捏着同一枚玉佩，画面右侧【姜蘅之】空手看着他。\"}]}",
+      "durationMs": 1506
+    },
+    {
+      "caseId": "entrance_jump",
+      "label": "人物出入画无交代跳变",
+      "run": 501,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": false,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1237
+    },
+    {
+      "caseId": "entrance_jump",
+      "label": "人物出入画无交代跳变",
+      "run": 502,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": false,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1103
+    },
+    {
+      "caseId": "entrance_jump",
+      "label": "人物出入画无交代跳变",
+      "run": 503,
+      "expected": "changed",
+      "status": 200,
+      "valid": true,
+      "changed": false,
+      "passed": false,
+      "changes": [],
+      "raw": "{\"changes\":[]}",
+      "durationMs": 1106
+    }
+  ]
+}
