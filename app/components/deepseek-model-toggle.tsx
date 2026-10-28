@@ -2,8 +2,9 @@
 "use client";
 
 import {useEffect, useState} from "react";
+import type {AiModel} from "../api/deepseek/model";
 
-type Model = "deepseek-v4-flash" | "deepseek-v4-pro" | "kimi-k3-high" | "kimi-k3-max";
+type Model = AiModel;
 const COOKIE = "loveu_ai_model";
 const options: Array<{value: Model; label: string}> = [
   {value: "deepseek-v4-flash", label: "Flash"},
@@ -16,12 +17,25 @@ export default function DeepSeekModelToggle() {
   const [model, setModel] = useState<Model>("deepseek-v4-pro");
 
   useEffect(() => {
-    const cookies = document.cookie.split("; ");
-    const saved = cookies.find((item) => item.startsWith(`${COOKIE}=`))?.split("=")[1]
-      || cookies.find((item) => item.startsWith("loveu_deepseek_model="))?.split("=")[1];
-    const migrated = saved === "kimi-k3" ? "kimi-k3-max" : saved;
+    let saved = "";
+    try {
+      saved = localStorage.getItem(COOKIE) || "";
+    } catch {}
+    if (!saved) {
+      const cookies = document.cookie.split("; ");
+      saved = cookies.find((item) => item.startsWith(`${COOKIE}=`))?.split("=")[1]
+        || cookies.find((item) => item.startsWith("loveu_deepseek_model="))?.split("=")[1] || "";
+    }
+    let migrated = saved === "kimi-k3" ? "kimi-k3-max" : saved;
+    if (migrated === "kimi-k3-official-high") migrated = "kimi-k3-high";
+    if (migrated === "kimi-k3-official-max") migrated = "kimi-k3-max";
     if (options.some((item) => item.value === migrated)) {
-      if (migrated !== saved) document.cookie = `${COOKIE}=${migrated}; Path=/; Max-Age=31536000; SameSite=None; Secure`;
+      if (migrated !== saved) {
+        document.cookie = `${COOKIE}=${migrated}; Path=/; Max-Age=31536000; SameSite=None; Secure`;
+        try {
+          localStorage.setItem(COOKIE, migrated);
+        } catch {}
+      }
       setModel(migrated as Model);
     }
     
@@ -33,6 +47,9 @@ export default function DeepSeekModelToggle() {
   }, []);
 
   const select = (next: Model) => {
+    try {
+      localStorage.setItem(COOKIE, next);
+    } catch {}
     document.cookie = `${COOKIE}=${next}; Path=/; Max-Age=31536000; SameSite=None; Secure`;
     setModel(next);
     window.dispatchEvent(new CustomEvent("loveu_ai_model_changed", {detail: next}));

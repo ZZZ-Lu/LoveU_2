@@ -3,6 +3,7 @@
 
 import {useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent} from "react";
 import DeepSeekModelToggle from "./components/deepseek-model-toggle";
+import type {AiModel} from "./api/deepseek/model";
 
 type Segment = {
   id: string;
@@ -380,11 +381,20 @@ export default function Home() {
   const [generatingId, setGeneratingId] = useState("");
   const [completedGenerationId, setCompletedGenerationId] = useState("");
   const [generationStage, setGenerationStage] = useState("");
-  const [model, setModel] = useState<"deepseek-v4-flash" | "deepseek-v4-pro" | "kimi-k3-high" | "kimi-k3-max">("deepseek-v4-pro");
+  const [model, setModel] = useState<AiModel>("deepseek-v4-pro");
   useEffect(() => {
-    const saved = document.cookie.split("; ").find(r => r.startsWith("loveu_ai_model="))?.split("=")[1];
-    if (saved && ["deepseek-v4-flash", "deepseek-v4-pro", "kimi-k3-high", "kimi-k3-max"].includes(saved)) {
-      setModel(saved as "deepseek-v4-flash" | "deepseek-v4-pro" | "kimi-k3-high" | "kimi-k3-max");
+    let saved = "";
+    try {
+      saved = localStorage.getItem("loveu_ai_model") || "";
+    } catch {}
+    if (!saved) {
+      saved = document.cookie.split("; ").find(r => r.startsWith("loveu_ai_model="))?.split("=")[1] || "";
+    }
+    let migrated = saved === "kimi-k3" ? "kimi-k3-max" : saved;
+    if (migrated === "kimi-k3-official-high") migrated = "kimi-k3-high";
+    if (migrated === "kimi-k3-official-max") migrated = "kimi-k3-max";
+    if (migrated && ["deepseek-v4-flash", "deepseek-v4-pro", "kimi-k3-high", "kimi-k3-max"].includes(migrated)) {
+      setModel(migrated as AiModel);
     }
     const handler = (e: Event) => setModel((e as CustomEvent).detail);
     window.addEventListener("loveu_ai_model_changed", handler);
@@ -1221,8 +1231,8 @@ export default function Home() {
     try {
       const response = await fetch("/api/deepseek/continuity", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({segmentText, prompt}),
+        headers: {"Content-Type": "application/json", "x-ai-model": model},
+        body: JSON.stringify({segmentText, prompt, model}),
       });
       if (!response.ok) return null;
       const result = await response.json() as {continuityState?: string};
@@ -1375,8 +1385,9 @@ export default function Home() {
       const exactContext = extractSegmentContext(segmentSnapshot.start, segmentSnapshot.end);
       const response = await fetch("/api/deepseek", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "application/json", "x-ai-model": model},
         body: JSON.stringify({
+          model,
           segmentText: active.script.slice(segmentSnapshot.start, segmentSnapshot.end),
           beforeContextSummary: exactContext.beforeContextSummary,
           afterContextSummary: exactContext.afterContextSummary,
@@ -1515,11 +1526,16 @@ export default function Home() {
         afterContextSummary: exactContext.afterContextSummary,
         contextSummaryUpdatedAt: Date.now(),
       });
+      const isKimi = model.includes("kimi");
       const response = await fetch("/api/deepseek", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: {
+          "Content-Type": "application/json",
+          "x-ai-model": model,
+        },
         signal: controller.signal,
         body: JSON.stringify({
+          model,
           segmentText: active.script.slice(selected.start, selected.end),
           contextSummary: [exactContext.beforeContextSummary, exactContext.afterContextSummary].join("\n"),
           beforeContextSummary: exactContext.beforeContextSummary,
@@ -1538,13 +1554,22 @@ export default function Home() {
         }),
       });
       if (!response.ok) {
-        const error = await response.json().catch(() => ({error: "DeepSeek 请求失败"}));
-        throw new Error(error.error || `DeepSeek 请求失败（${response.status}）`);
+        const errText = await response.text().catch(() => "");
+        let errMsg = `${isKimi ? "Kimi" : "DeepSeek"} 请求失败（${response.status}）`;
+        try {
+          const parsed = JSON.parse(errText);
+          if (parsed.error) errMsg = parsed.error;
+        } catch {
+          if (errText.includes("504") || response.status === 504) {
+            errMsg = `${isKimi ? "Kimi K3 Max" : "模型"}思考时间较长导致网关超时，请稍后重试`;
+          }
+        }
+        throw new Error(errMsg);
       }
       if (response.headers.get("content-type")?.includes("text/html")) {
         throw new Error("请求超时或服务暂未就绪，请重试（如是因模型生成过慢导致超时，可尝试缩短文本或关闭验收）");
       }
-      if (!response.body) throw new Error("DeepSeek 没有返回内容");
+      if (!response.body) throw new Error(`${isKimi ? "Kimi" : "DeepSeek"} 没有返回内容`);
       updateSegmentById(segmentId, {
         prompt: prefix,
         modified: false,
@@ -1575,7 +1600,7 @@ export default function Home() {
       setGenerationStage(extracted !== null ? "已生成 · 连续性状态已保存" : "已生成 · 连续性状态提取失败");
     } catch (error) {
       if (controller.signal.aborted) setGenerationStage("已停止，当前内容已保存");
-      else setGenerationStage(error instanceof Error ? error.message : "DeepSeek 请求失败");
+      else setGenerationStage(error instanceof Error ? error.message : `${model.includes("kimi") ? "Kimi" : "DeepSeek"} 请求失败`);
     } finally {
       if (generationAbort.current === controller) generationAbort.current = null;
       setGeneratingId("");
@@ -2104,7 +2129,7 @@ export default function Home() {
               <b>{selected.title}</b>
               <label>模型
                 <select value={model} onChange={(event) => {
-                  const next = event.target.value as "deepseek-v4-flash" | "deepseek-v4-pro" | "kimi-k3-high" | "kimi-k3-max";
+                  const next = event.target.value as AiModel;
                   document.cookie = `loveu_ai_model=${next}; Path=/; Max-Age=31536000; SameSite=None; Secure`;
                   setModel(next);
                   window.dispatchEvent(new CustomEvent("loveu_ai_model_changed", {detail: next}));

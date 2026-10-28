@@ -1,10 +1,69 @@
 import {NextRequest} from "next/server";
-import {getMissingKeyMessage, getModelApiKey, isKimiModel, requestChatCompletions, resolveDeepSeekModel, type DeepSeekModel} from "../model";
+import {
+  DEEPSEEK_MAX_TOKENS,
+  getKimiLabel,
+  getMissingKeyMessage,
+  getModelApiKey,
+  isKimiModel,
+  requestChatCompletions,
+  resolveDeepSeekModel,
+  type DeepSeekModel,
+} from "../model";
 
 export const runtime = "nodejs";
 
-type NodeRequest = {nodeId?: string; script?: string; storyboard?: string; performanceStoryboard?: string; systemPrompt?: string};
+type NodeRequest = {
+  taskId?: string;
+  model?: string;
+  nodeId?: string;
+  script?: string;
+  storyboard?: string;
+  performanceStoryboard?: string;
+  systemPrompt?: string;
+  targetShotIndex?: number;
+  targetShotText?: string;
+  previousShotContext?: string;
+};
 type Stage = {id: string; name: string; input: string; output: string; result: string; durationMs: number};
+
+const globalNodeTasks = globalThis as Record<string, unknown>;
+globalNodeTasks.nodeTasks = globalNodeTasks.nodeTasks || new Map<string, unknown>();
+const nodeTasks = globalNodeTasks.nodeTasks as Map<string, unknown>;
+
+const SINGLE_SHOT_AUDIOVISUAL_POLISH = `你是短剧分镜导演与视听构图专家。
+你的任务是：针对用户指定的【当前目标分镜】，在脑海中充分想象出这一幕电影级实拍或高品质视频生成的生动画面，用真实导演的专业视角、纯粹说人话的语言把画面完整、清楚地描述出来。
+
+【四大核心维度（写完整、清楚即可）】
+1. 机位与景别：清楚写明景别（如：全景 / 中景 / 近景 / 特写）与机位运镜方式（如：平视固定机位、略带颠簸的跟拍/侧拍、缓推至面部等）。
+2. 画面核心主体与动态：像人类导演站在监视器前一样，清楚描述场景环境、主体人物的位置朝向、肢体动作与正在发生的核心事件。
+   - 彻底剔除抽象文学心理词（严禁写“神色复杂/若有所思/怒不可遏/意味深长/眼神闪过一丝杀意”等无法拍摄的假大空词汇）；
+   - 直接写出生动、具体、可见的人物动作、眼神落点与神态。视频模型本身会自然完善基础物理动态，写清楚核心动态即可。
+3. 光影与影调质感：直观描述主光源与视觉氛围，交代冷暖影调与画面质感（如：昏黄车灯撕破浓黑暴雨、冷冽月光斜切面部轮廓、微弱烛火映照暗部）。
+4. 声音与音效：交代现场环境声（如暴雨声、风声、人群嘈杂）、关键动作拟音（如马蹄践踏声、茶盏磕碰声）或戏剧重音。
+5. 台词/关键动作：原样保留原剧本台词，绝不增删或篡改（无台词则写“无”）。
+
+【严厉禁令（绝对禁止，违者零分）】
+- ❌ 绝对严禁捏造虚假参数与伪数据（严禁出现色温 K 值如 2800K/6500K、倾斜角度如 30°/15°、画幅百分比如 2%/三分之一/下缘六分之一、频率如 40Hz/80Hz、秒数间隔如 0.3s/0.5s 等生硬数字）！
+- ❌ 绝对严禁堆砌视频模型会自主完善的碎屑细节（不要写过度繁琐的说教式细节，如雨水沿帽檐滴落手背、泥浆溅到马膝等）。
+- ❌ 绝不写 AI 八股文与说教废话，字数控制在 120~200 字左右，完整、清楚、像人话，充满视觉张力！
+
+【输出规范】
+请先在 <POLISH_ANALYSIS> 标签中，用 1~2 句话指出该镜头的核心画面提升方向。
+随后在 <VIDEO_PROMPT> 标签中仅输出该镜头的工业级分镜文本：
+
+格式范例：
+<POLISH_ANALYSIS>
+- 画面构思：将抽象的情绪词具象化为紧凑的跟拍与雨夜疾驰动作，增强视觉张力。
+</POLISH_ANALYSIS>
+<VIDEO_PROMPT>
+【分镜X】
+机位与景别：全景，略带颠簸的跟拍/侧拍
+画面核心主体与动态：暴雨夜，一辆马车在泥泞驿道上狂奔，车夫冒雨狠抽马鞭，马匹冒着热气踏破积水，车身剧烈颠簸。
+光影与影调质感：车灯昏黄的暖光撕破浓黑暴雨，照亮飞溅的泥水，背景黑沉沉的树影呼啸而过。
+声音与音效：密集暴雨抽打声、急促的马蹄泥泞践踏声与急促粗喘。
+台词：无
+</VIDEO_PROMPT>
+`;
 
 const SHOT_SPLIT = `你是短剧分镜的镜头原子性检查师。
 
@@ -74,7 +133,47 @@ const STRUCTURE_PERFORMANCE_FUSION = `你坐在监视器前，要把同一段剧
 </VIDEO_PROMPT>
 `;
 
+const SHOT_AUDIOVISUAL_POLISH = `你是短剧分镜导演与视听构图专家。
+你的任务是：针对输入的分镜，在脑海中充分想象出电影级实拍或高品质视频生成的生动画面，用真实导演的专业视角、纯粹说人话的语言把画面完整、清楚地描述出来。
+
+【四大核心维度（写完整、清楚即可）】
+1. 机位与景别：清楚写明景别（如：全景 / 中景 / 近景 / 特写）与机位运镜方式（如：平视固定机位、略带颠簸的跟拍/侧拍、缓推至面部等）。
+2. 画面核心主体与动态：像人类导演站在监视器前一样，清楚描述场景环境、主体人物的位置朝向、肢体动作与正在发生的核心事件。
+   - 彻底剔除抽象文学心理词（严禁写“神色复杂/若有所思/怒不可遏/意味深长/眼神闪过一丝杀意”等无法拍摄的假大空词汇）；
+   - 直接写出生动、具体、可见的人物动作、眼神落点与神态。视频模型本身会自然完善基础物理动态，写清楚核心动态即可。
+3. 光影与影调质感：直观描述主光源与视觉氛围，交代冷暖影调与画面质感（如：昏黄车灯撕破浓黑暴雨、冷冽月光斜切面部轮廓、微弱烛火映照暗部）。
+4. 声音与音效：交代现场环境声（如暴雨声、风声、人群嘈杂）、关键动作拟音（如马蹄践踏声、茶盏磕碰声）或戏剧重音。
+5. 台词/关键动作：原样保留原剧本台词，绝不增删或篡改（无台词则写“无”）。
+
+【严厉禁令（绝对禁止，违者零分）】
+- ❌ 绝对严禁捏造虚假参数与伪数据（严禁出现色温 K 值如 2800K/6500K、倾斜角度如 30°/15°、画幅百分比如 2%/三分之一/下缘六分之一、频率如 40Hz/80Hz、秒数间隔如 0.3s/0.5s 等生硬数字）！
+- ❌ 绝对严禁堆砌视频模型会自主完善的碎屑细节（不要写过度繁琐的说教式细节，如雨水沿帽檐滴落手背、泥浆溅到马膝等）。
+- ❌ 绝不写 AI 八股文与说教废话，每个镜头约 120~200 字，完整、清楚、像人话，充满视觉张力！
+
+【输出规范】
+请先在 <POLISH_ANALYSIS> 标签中，按镜头用一两句话简要说明提升方向。
+随后在 <VIDEO_PROMPT> 标签中输出精修后的完整分镜，必须保留原剧本台词与剧情顺序，不得改写或增删原剧本台词。
+
+格式范例：
+<POLISH_ANALYSIS>
+【分镜1】将抽象的情绪词具象化为紧凑的跟拍与雨夜疾驰动作，增强视觉张力。
+……
+</POLISH_ANALYSIS>
+<VIDEO_PROMPT>
+【分镜1】
+机位与景别：全景，略带颠簸的跟拍/侧拍
+画面核心主体与动态：暴雨夜，一辆马车在泥泞驿道上狂奔，车夫冒雨狠抽马鞭，马匹冒着热气踏破积水，车身剧烈颠簸。
+光影与影调质感：车灯昏黄的暖光撕破浓黑暴雨，照亮飞溅的泥水，背景黑沉沉的树影呼啸而过。
+声音与音效：密集暴雨抽打声、急促的马蹄泥泞践踏声与急促粗喘。
+台词：无
+
+【分镜2】
+……
+</VIDEO_PROMPT>
+`;
+
 const presets = [
+  {id: "shot-audiovisual-polish", name: "视听三维精修节点（画面想象·主体动态·光影声音）", note: "导演视角想象画面，说人话描述机位、核心动态、光影与声场，写完整清楚，拒绝伪参数", prompt: SHOT_AUDIOVISUAL_POLISH},
   {id: "shot-split", name: "分镜拆分节点", note: "检查一个编号内是否存在必须剪辑的机位跳变", prompt: SHOT_SPLIT},
   {id: "spatial-correction", name: "空间矛盾纠正", note: "只修正前后矛盾，不补写缺失信息", prompt: SPATIAL_CORRECTION},
   {id: "spatial-completion", name: "空间信息完善", note: "补齐画面层次、位置、朝向、视线和身体部位", prompt: SPATIAL_COMPLETION},
@@ -84,8 +183,15 @@ const presets = [
   {id: "structure-performance-fusion", name: "V14-5验收后融合", note: "先修订V14-5的镜头原子性、空间与画面闭合，再吸收V7-2表演细节", prompt: STRUCTURE_PERFORMANCE_FUSION},
 ];
 
-const extractContent = async (apiKey: string, model: DeepSeekModel, system: string, user: string, signal: AbortSignal, json = false) => {
-  const {response} = await requestChatCompletions(model, apiKey, {messages: [{role: "system", content: system}, {role: "user", content: user}], temperature: 0.1, maxTokens: 5200, json}, signal);
+const extractContent = async (apiKey: string, model: DeepSeekModel, system: string, user: string, signal?: AbortSignal, json = false, maxTokensOverride?: number, isCancelled?: () => boolean) => {
+  if (isCancelled?.() || signal?.aborted) throw new Error("任务已取消");
+  const {response} = await requestChatCompletions(model, apiKey, {
+    messages: [{role: "system", content: system}, {role: "user", content: user}],
+    temperature: 0.1,
+    maxTokens: maxTokensOverride ?? (isKimiModel(model) ? 15000 : DEEPSEEK_MAX_TOKENS),
+    json,
+  }, signal);
+  if (isCancelled?.() || signal?.aborted) throw new Error("任务已取消");
   if (!response.ok) throw new Error(`${isKimiModel(model) ? "Kimi" : "DeepSeek"} 请求失败（${response.status}）：${(await response.text()).slice(0, 240)}`);
   const data = await response.json();
   const content = String(data.choices?.[0]?.message?.content || "").trim();
@@ -124,71 +230,268 @@ const extractVideoPrompt = (raw: string) => {
   }
   const firstShot = raw.search(/【\s*分镜\s*1\s*】/);
   if (firstShot >= 0) return raw.slice(firstShot).replace(/<\/VIDEO_PROMPT>[\s\S]*$/i, "").trim();
-  throw new Error("融合节点没有返回可识别的最终分镜");
+  return raw.trim();
 };
 
-export async function GET() {return Response.json({presets});}
+const extractSingleShotPrompt = (raw: string, shotIndex?: number) => {
+  const tagged = raw.match(/<VIDEO_PROMPT>([\s\S]*?)<\/VIDEO_PROMPT>/i)?.[1]?.trim();
+  if (tagged) return tagged;
+  const openTag = raw.match(/<VIDEO_PROMPT>/i);
+  if (openTag?.index !== undefined) {
+    return raw.slice(openTag.index + openTag[0].length).replace(/<\/VIDEO_PROMPT>[\s\S]*$/i, "").trim();
+  }
+  const prefix = shotIndex ? new RegExp(`【\\s*分镜\\s*${shotIndex}\\s*】`) : /【\s*分镜\s*\d+\s*】/;
+  const match = raw.search(prefix);
+  if (match >= 0) return raw.slice(match).replace(/<\/VIDEO_PROMPT>[\s\S]*$/i, "").trim();
+  return raw.trim();
+};
+
+export async function GET(request: NextRequest) {
+  const url = new URL(request.url);
+  const taskId = url.searchParams.get("taskId");
+  if (taskId) {
+    const task = nodeTasks.get(taskId) as Record<string, unknown> | undefined;
+    if (!task) return Response.json({status: "not_found"}, {status: 404});
+    if (task.startedAt && typeof task.startedAt === "number") {
+      task.elapsedMs = Date.now() - task.startedAt;
+    }
+    return Response.json(task);
+  }
+  return Response.json({presets});
+}
+
+const runNodeInternal = async (
+  body: NodeRequest,
+  model: DeepSeekModel,
+  apiKey: string,
+  signal?: AbortSignal,
+  onStageUpdate?: (stage: string) => void,
+  isCancelled?: () => boolean,
+) => {
+  const checkCancelled = () => {
+    if (isCancelled?.() || signal?.aborted) {
+      throw new Error("任务已取消");
+    }
+  };
+  checkCancelled();
+
+  const storyboard = String(body.storyboard || "").trim().slice(0, 50000);
+  const performanceStoryboard = String(body.performanceStoryboard || "").trim().slice(0, 50000);
+  const script = String(body.script || "").trim().slice(0, 30000);
+  const preset = presets.find((item) => item.id === body.nodeId);
+  if (!preset || !storyboard) throw new Error("请选择节点并输入待检查分镜。");
+  if (preset.id === "structure-performance-fusion" && !performanceStoryboard) {
+    throw new Error("结构表演融合节点需要同时输入V14-5结构版和V7-2表演版。");
+  }
+
+  const stages: Stage[] = [];
+  const run = async (id: string, name: string, system: string, input: string, json: boolean, current: string) => {
+    checkCancelled();
+    onStageUpdate?.(`正在运行阶段：${name}……`);
+    const started = Date.now();
+    const output = await extractContent(apiKey, model, system, input, signal, json, undefined, isCancelled);
+    checkCancelled();
+    let result = output;
+    if (json && id !== "frame-manifest") result = applyChanges(current, output);
+    stages.push({id, name, input, output, result, durationMs: Date.now() - started});
+    return result;
+  };
+  const context = (value: string, label = "待检查分镜") => `原剧本：\n${script || "（未提供）"}\n\n${label}：\n${value}`;
+  const custom = String(body.systemPrompt || "").trim();
+  let finalResult = storyboard;
+
+  if (preset.id === "shot-audiovisual-polish") {
+    const shots = splitShots(storyboard);
+    const hasTargetShot = body.targetShotIndex !== undefined || Boolean(body.targetShotText);
+
+    if (hasTargetShot) {
+      const targetIndex = body.targetShotIndex !== undefined && body.targetShotIndex > 0 ? body.targetShotIndex - 1 : 0;
+      const targetShotText = body.targetShotText || shots[targetIndex] || storyboard;
+      const prevContext = targetIndex > 0 && shots[targetIndex - 1]
+        ? `【前序分镜机位与动作（维持镜头轴线与机位连贯，严禁跳轴）】：\n${shots[targetIndex - 1]}\n\n`
+        : "";
+      const polishInput = `原剧本：\n${script || "（未提供）"}\n\n${prevContext}【待精修的当前目标分镜（第 ${targetIndex + 1} 镜）】：\n${targetShotText}`;
+
+      onStageUpdate?.(`正在精修第 ${targetIndex + 1} 镜（画面动态·光影质感）……`);
+      const started = Date.now();
+      const output = await extractContent(apiKey, model, custom || SINGLE_SHOT_AUDIOVISUAL_POLISH, polishInput, signal, false, 2500, isCancelled);
+      const polishedShot = extractSingleShotPrompt(output, targetIndex + 1);
+
+      if (shots.length > targetIndex) {
+        shots[targetIndex] = polishedShot;
+        finalResult = shots.join("\n\n");
+      } else {
+        finalResult = polishedShot;
+      }
+
+      const analysis = output.match(/<POLISH_ANALYSIS>([\s\S]*?)<\/POLISH_ANALYSIS>/i)?.[1]?.trim() || "";
+      stages.push({
+        id: `shot-audiovisual-polish-shot-${targetIndex + 1}`,
+        name: `第 ${targetIndex + 1} 镜视听精修（导演视听版）`,
+        input: polishInput,
+        output,
+        result: polishedShot,
+        durationMs: Date.now() - started,
+      });
+
+      return {
+        nodeId: preset.id,
+        model,
+        targetShotIndex: targetIndex + 1,
+        polishedShot,
+        analysis,
+        finalResult,
+        stages,
+        durationMs: stages.reduce((sum, stage) => sum + stage.durationMs, 0),
+      };
+    }
+
+    const polishInput = `原剧本：\n${script || "（未提供）"}\n\n待精修分镜：\n${storyboard}`;
+    onStageUpdate?.("正在执行视听逐镜画面升维……");
+    const started = Date.now();
+    const output = await extractContent(apiKey, model, custom || SHOT_AUDIOVISUAL_POLISH, polishInput, signal, false, undefined, isCancelled);
+    finalResult = extractVideoPrompt(output);
+    stages.push({
+      id: "shot-audiovisual-polish",
+      name: "逐镜视听精修（画面动态·光影质感）",
+      input: polishInput,
+      output,
+      result: finalResult,
+      durationMs: Date.now() - started,
+    });
+  } else if (preset.id === "shot-split") {
+    finalResult = await run("shot-split", preset.name, custom || SHOT_SPLIT, `待检查分镜：\n${storyboard}`, false, storyboard);
+  } else if (preset.id === "spatial-correction") {
+    finalResult = await run("spatial-correction", preset.name, custom || SPATIAL_CORRECTION, context(storyboard), true, storyboard);
+  } else if (preset.id === "spatial-completion") {
+    finalResult = await run("spatial-completion", preset.name, custom || SPATIAL_COMPLETION, context(storyboard, "已纠正分镜"), true, storyboard);
+  } else if (preset.id === "spatial-pipeline") {
+    finalResult = await run("spatial-correction", "第一步 · 空间矛盾纠正", custom || SPATIAL_CORRECTION, context(storyboard), true, storyboard);
+    finalResult = await run("spatial-completion", "第二步 · 空间信息完善", SPATIAL_COMPLETION, context(finalResult, "已纠正分镜"), true, finalResult);
+  } else if (preset.id === "frame-manifest") {
+    finalResult = await run("frame-manifest", preset.name, custom || FRAME_MANIFEST, context(storyboard), true, storyboard);
+  } else if (preset.id === "frame-closure") {
+    const manifest = await run("frame-manifest", "第一步 · 画框清单", FRAME_MANIFEST, context(storyboard), true, storyboard);
+    const closureInput = `${context(storyboard)}\n\n画框清单：\n${manifest}`;
+    finalResult = await run("frame-closure", "第二步 · 画面闭合修订", custom || FRAME_CLOSURE, closureInput, true, storyboard);
+  } else if (preset.id === "structure-performance-fusion") {
+    let checkedStructure = await run("fusion-shot-split", "验收1 · 分镜拆分", SHOT_SPLIT, context(storyboard, "V14-5原始分镜"), false, storyboard);
+    if (/(?:镜头|画面)?(?:迅速|快速|随后|再)?切回/u.test(checkedStructure)) {
+      checkedStructure = await run("fusion-shot-split-recheck", "验收1B · 明确剪辑复检", SHOT_SPLIT_RECHECK, context(checkedStructure, "仍含明确内部剪辑的V14-5分镜"), false, checkedStructure);
+      if (/(?:镜头|画面)?(?:迅速|快速|随后|再)?切回/u.test(checkedStructure)) throw new Error("V14-5分镜复检后仍存在明确的内部切镜，已停止融合。请先在分镜拆分节点中修订。");
+    }
+    checkedStructure = await run("fusion-spatial-correction", "验收2 · 空间矛盾纠正", SPATIAL_CORRECTION, context(checkedStructure, "已拆分V14-5分镜"), true, checkedStructure);
+    checkedStructure = await run("fusion-spatial-completion", "验收3 · 空间信息完善", SPATIAL_COMPLETION, context(checkedStructure, "已纠错V14-5分镜"), true, checkedStructure);
+    const manifest = await run("fusion-frame-manifest", "验收4 · 画框清单", FRAME_MANIFEST, context(checkedStructure, "已完善V14-5分镜"), true, checkedStructure);
+    checkedStructure = await run("fusion-frame-closure", "验收5 · 画面闭合", FRAME_CLOSURE, `${context(checkedStructure, "已完善V14-5分镜")}\n\n画框清单：\n${manifest}`, true, checkedStructure);
+    checkedStructure = await run("fusion-dialogue-dedup", "验收6 · 台词归属与去重", DIALOGUE_DEDUP, context(checkedStructure, "画面闭合后的V14-5分镜"), true, checkedStructure);
+    const dialogueConflicts = overlappingDialogue(checkedStructure);
+    if (dialogueConflicts.length) {
+      const targetedInput = `${context(checkedStructure, "仍有台词重复的V14-5分镜")}\n\n已检测到以下整句或包含式重复，必须删除后一个镜头中的重复部分：\n${dialogueConflicts.join("\n")}`;
+      checkedStructure = await run("fusion-dialogue-dedup-recheck", "验收6B · 重复台词复检", DIALOGUE_DEDUP, targetedInput, true, checkedStructure);
+      if (overlappingDialogue(checkedStructure).length) throw new Error("V14-5复检后仍存在跨分镜重复台词，已停止融合。请先修订台词归属。");
+    }
+    const fusionInput = `原剧本：\n${script || "（未提供）"}\n\n验收后V14-5结构版分镜：\n${checkedStructure}\n\nV7-2测试版表演版分镜：\n${performanceStoryboard}`;
+    const started = Date.now();
+    onStageUpdate?.("正在融合 V14-5 结构与 V7-2 表演……");
+    const output = await extractContent(apiKey, model, custom || STRUCTURE_PERFORMANCE_FUSION, fusionInput, signal, false, undefined, isCancelled);
+    finalResult = extractVideoPrompt(output);
+    if (overlappingDialogue(finalResult).length) throw new Error("融合结果重新引入了跨分镜重复台词，已拒绝该结果，请重新运行。");
+    stages.push({id: "structure-performance-fusion", name: "验收7 · 结构表演融合", input: fusionInput, output, result: finalResult, durationMs: Date.now() - started});
+  }
+
+  return {nodeId: preset.id, model, finalResult, stages, durationMs: stages.reduce((sum, stage) => sum + stage.durationMs, 0)};
+};
+
+export async function DELETE(request: NextRequest) {
+  const url = new URL(request.url);
+  const taskId = url.searchParams.get("taskId");
+  if (taskId) {
+    const task = nodeTasks.get(taskId) as {status?: string} | undefined;
+    if (task) {
+      task.status = "cancelled";
+      nodeTasks.delete(taskId);
+      return Response.json({status: "cancelled"});
+    }
+  }
+  return Response.json({status: "not_found"}, {status: 404});
+}
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json() as NodeRequest;
-    const model = resolveDeepSeekModel(request);
+    const model = resolveDeepSeekModel(request, body.model);
     const apiKey = getModelApiKey(model);
     if (!apiKey) return Response.json({error: getMissingKeyMessage(model)}, {status: 503});
-    const storyboard = String(body.storyboard || "").trim().slice(0, 50000);
-    const performanceStoryboard = String(body.performanceStoryboard || "").trim().slice(0, 50000);
-    const script = String(body.script || "").trim().slice(0, 30000);
-    const preset = presets.find((item) => item.id === body.nodeId);
-    if (!preset || !storyboard) return Response.json({error: "请选择节点并输入待检查分镜。"}, {status: 400});
-    if (preset.id === "structure-performance-fusion" && !performanceStoryboard) return Response.json({error: "结构表演融合节点需要同时输入V14-5结构版和V7-2表演版。"}, {status: 400});
-    const stages: Stage[] = [];
-    const run = async (id: string, name: string, system: string, input: string, json: boolean, current: string) => {
-      const started = Date.now();
-      const output = await extractContent(apiKey, model, system, input, request.signal, json);
-      let result = output;
-      if (json && id !== "frame-manifest") result = applyChanges(current, output);
-      stages.push({id, name, input, output, result, durationMs: Date.now() - started});
-      return result;
-    };
-    const context = (value: string, label = "待检查分镜") => `原剧本：\n${script || "（未提供）"}\n\n${label}：\n${value}`;
-    const custom = String(body.systemPrompt || "").trim();
-    let finalResult = storyboard;
 
-    if (preset.id === "shot-split") finalResult = await run("shot-split", preset.name, custom || SHOT_SPLIT, `待检查分镜：\n${storyboard}`, false, storyboard);
-    else if (preset.id === "spatial-correction") finalResult = await run("spatial-correction", preset.name, custom || SPATIAL_CORRECTION, context(storyboard), true, storyboard);
-    else if (preset.id === "spatial-completion") finalResult = await run("spatial-completion", preset.name, custom || SPATIAL_COMPLETION, context(storyboard, "已纠正分镜"), true, storyboard);
-    else if (preset.id === "spatial-pipeline") {
-      finalResult = await run("spatial-correction", "第一步 · 空间矛盾纠正", custom || SPATIAL_CORRECTION, context(storyboard), true, storyboard);
-      finalResult = await run("spatial-completion", "第二步 · 空间信息完善", SPATIAL_COMPLETION, context(finalResult, "已纠正分镜"), true, finalResult);
-    } else if (preset.id === "frame-manifest") finalResult = await run("frame-manifest", preset.name, custom || FRAME_MANIFEST, context(storyboard), true, storyboard);
-    else if (preset.id === "frame-closure") {
-      const manifest = await run("frame-manifest", "第一步 · 画框清单", FRAME_MANIFEST, context(storyboard), true, storyboard);
-      const closureInput = `${context(storyboard)}\n\n画框清单：\n${manifest}`;
-      finalResult = await run("frame-closure", "第二步 · 画面闭合修订", custom || FRAME_CLOSURE, closureInput, true, storyboard);
-    } else if (preset.id === "structure-performance-fusion") {
-      let checkedStructure = await run("fusion-shot-split", "验收1 · 分镜拆分", SHOT_SPLIT, context(storyboard, "V14-5原始分镜"), false, storyboard);
-      if (/(?:镜头|画面)?(?:迅速|快速|随后|再)?切回/u.test(checkedStructure)) {
-        checkedStructure = await run("fusion-shot-split-recheck", "验收1B · 明确剪辑复检", SHOT_SPLIT_RECHECK, context(checkedStructure, "仍含明确内部剪辑的V14-5分镜"), false, checkedStructure);
-        if (/(?:镜头|画面)?(?:迅速|快速|随后|再)?切回/u.test(checkedStructure)) throw new Error("V14-5分镜复检后仍存在明确的内部切镜，已停止融合。请先在分镜拆分节点中修订。");
-      }
-      checkedStructure = await run("fusion-spatial-correction", "验收2 · 空间矛盾纠正", SPATIAL_CORRECTION, context(checkedStructure, "已拆分V14-5分镜"), true, checkedStructure);
-      checkedStructure = await run("fusion-spatial-completion", "验收3 · 空间信息完善", SPATIAL_COMPLETION, context(checkedStructure, "已纠错V14-5分镜"), true, checkedStructure);
-      const manifest = await run("fusion-frame-manifest", "验收4 · 画框清单", FRAME_MANIFEST, context(checkedStructure, "已完善V14-5分镜"), true, checkedStructure);
-      checkedStructure = await run("fusion-frame-closure", "验收5 · 画面闭合", FRAME_CLOSURE, `${context(checkedStructure, "已完善V14-5分镜")}\n\n画框清单：\n${manifest}`, true, checkedStructure);
-      checkedStructure = await run("fusion-dialogue-dedup", "验收6 · 台词归属与去重", DIALOGUE_DEDUP, context(checkedStructure, "画面闭合后的V14-5分镜"), true, checkedStructure);
-      const dialogueConflicts = overlappingDialogue(checkedStructure);
-      if (dialogueConflicts.length) {
-        const targetedInput = `${context(checkedStructure, "仍有台词重复的V14-5分镜")}\n\n已检测到以下整句或包含式重复，必须删除后一个镜头中的重复部分：\n${dialogueConflicts.join("\n")}`;
-        checkedStructure = await run("fusion-dialogue-dedup-recheck", "验收6B · 重复台词复检", DIALOGUE_DEDUP, targetedInput, true, checkedStructure);
-        if (overlappingDialogue(checkedStructure).length) throw new Error("V14-5复检后仍存在跨分镜重复台词，已停止融合。请先修订台词归属。");
-      }
-      const fusionInput = `原剧本：\n${script || "（未提供）"}\n\n验收后V14-5结构版分镜：\n${checkedStructure}\n\nV7-2测试版表演版分镜：\n${performanceStoryboard}`;
-      const started = Date.now();
-      const output = await extractContent(apiKey, model, custom || STRUCTURE_PERFORMANCE_FUSION, fusionInput, request.signal, false);
-      finalResult = extractVideoPrompt(output);
-      if (overlappingDialogue(finalResult).length) throw new Error("融合结果重新引入了跨分镜重复台词，已拒绝该结果，请重新运行。");
-      stages.push({id: "structure-performance-fusion", name: "验收7 · 结构表演融合", input: fusionInput, output, result: finalResult, durationMs: Date.now() - started});
+    if (body.taskId) {
+      const taskId = body.taskId;
+      nodeTasks.set(taskId, {
+        id: taskId,
+        model,
+        status: "running",
+        startedAt: Date.now(),
+        stage: isKimiModel(model) ? `${getKimiLabel(model)} 正在进行深度意识流推演与视听构思……` : `节点任务已接收（模型: ${model}），准备开始推演……`,
+      });
+
+      const isCancelled = () => {
+        const currentTask = nodeTasks.get(taskId) as {status?: string} | undefined;
+        return !currentTask || currentTask.status === "cancelled";
+      };
+
+      // 启动后台异步任务，不挂起前端 HTTP 连接（彻底免疫 HTTP 反向代理 504 网关超时）
+      (async () => {
+        try {
+          const result = await runNodeInternal(
+            body,
+            model,
+            apiKey,
+            undefined,
+            (stageText) => {
+              const currentTask = nodeTasks.get(taskId) as Record<string, unknown> | undefined;
+              if (currentTask && currentTask.status === "running") {
+                currentTask.stage = stageText;
+              }
+            },
+            isCancelled,
+          );
+          if (isCancelled()) return;
+          const taskResult = {
+            id: taskId,
+            model,
+            status: "done" as const,
+            startedAt: Date.now(),
+            stage: "推演完成",
+            result,
+          };
+          nodeTasks.set(taskId, taskResult);
+          setTimeout(() => nodeTasks.delete(taskId), 3600000);
+        } catch (err) {
+          if (isCancelled()) return;
+          nodeTasks.set(taskId, {
+            id: taskId,
+            model,
+            status: "error",
+            stage: "运行出错",
+            error: err instanceof Error ? err.message : String(err),
+          });
+          setTimeout(() => nodeTasks.delete(taskId), 3600000);
+        }
+      })();
+
+      return Response.json({
+        id: taskId,
+        taskId,
+        model,
+        status: "running",
+        startedAt: Date.now(),
+        stage: isKimiModel(model) ? `${getKimiLabel(model)} 正在进行深度意识流推演与视听构思……` : "任务已创建，正在进入推演流水线……",
+      }, {status: 202});
     }
-    return Response.json({nodeId: preset.id, finalResult, stages, durationMs: stages.reduce((sum, stage) => sum + stage.durationMs, 0)});
-  } catch (error) {return Response.json({error: error instanceof Error ? error.message : "节点测试失败"}, {status: 502});}
+
+    const result = await runNodeInternal(body, model, apiKey, request.signal);
+    return Response.json(result);
+  } catch (error) {
+    return Response.json({error: error instanceof Error ? error.message : "节点测试失败"}, {status: 502});
+  }
 }

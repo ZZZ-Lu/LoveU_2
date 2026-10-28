@@ -1,6 +1,15 @@
 import {NextRequest} from "next/server";
 import {addDebugRound, completeDebugRun, createDebugRun, failDebugRun, setFinalDebugInput} from "./debug-store";
-import {getMissingKeyMessage, getModelApiKey, isKimiModel, requestChatCompletions, resolveDeepSeekModel, type DeepSeekModel} from "./model";
+import {
+  DEEPSEEK_MAX_TOKENS,
+  getKimiLabel,
+  getMissingKeyMessage,
+  getModelApiKey,
+  isKimiModel,
+  requestChatCompletions,
+  resolveDeepSeekModel,
+  type DeepSeekModel,
+} from "./model";
 import {
   ARCHIVED_PROMPT_OPTIONS,
   DEFAULT_ARCHIVED_PROMPT_VERSION,
@@ -11,8 +20,10 @@ import {
 } from "./prompt-archive";
 
 export const runtime = "nodejs";
+export const maxDuration = 900; // 15 分钟超时，确保 K3MAX 等深度思考模型有充分生成时间
 
 type GenerateRequest = {
+  model?: string;
   segmentText?: string; previousText?: string; previousPrompt?: string;
   nextText?: string; nextPrompt?: string; existingPrompt?: string;
   contextSummary?: string;
@@ -28,7 +39,30 @@ type GenerateRequest = {
   promptVersion?: string;
   promptTemplate?: string;
   settings?: {reviewEnabled?: boolean};
+  taskId?: string;
+  asyncTask?: boolean;
 };
+
+type TaskResult = {
+  prompt: string;
+  warning?: string;
+  rawInput?: string;
+  model: string;
+};
+
+type DeepSeekTask = {
+  id: string;
+  status: "running" | "done" | "error" | "cancelled";
+  startedAt: number;
+  completedAt?: number;
+  stage?: string;
+  result?: TaskResult;
+  error?: string;
+};
+
+const globalTasks = globalThis as Record<string, unknown>;
+globalTasks.deepseekTasks = globalTasks.deepseekTasks || new Map<string, DeepSeekTask>();
+const tasks = globalTasks.deepseekTasks as Map<string, DeepSeekTask>;
 type Review = {mustFix: string[]; shouldFix: string[]; optional: string[]};
 type FrameManifestItem = {
   shot: number;
@@ -160,24 +194,107 @@ const chineseNumber = (value: string) => {
   if (ten >= 0) return (ten === 0 ? 1 : digits[value[ten - 1]] || 0) * 10 + (ten === value.length - 1 ? 0 : digits[value[ten + 1]] || 0);
   return digits[value] || NaN;
 };
-const parseDirectorOutput = (raw: string) => {
-  const tagged = /<VIDEO_PROMPT>([\s\S]*?)<\/VIDEO_PROMPT>/i.exec(raw);
-  const openTag = /<VIDEO_PROMPT>/i.exec(raw);
-  const scope = tagged?.[1] || (openTag?.index !== undefined ? raw.slice(openTag.index + openTag[0].length) : raw);
+const parseDirectorOutput = (rawContent: string, reasoningText = "") => {
+  let content = String(rawContent || "").trim();
+  const reasoning = String(reasoningText || "").trim();
+  if (!content && reasoning) {
+    content = reasoning;
+  }
+
+  // 1. 优先查找包含“分镜1”的完整 <VIDEO_PROMPT>...</VIDEO_PROMPT> 标签块（从后向前找最新/最终输出）
+  const allTagged = [...content.matchAll(/<VIDEO_PROMPT>([\s\S]*?)<\/VIDEO_PROMPT>/gi)];
+  let targetScope = "";
+  let beforeScope = "";
+
+  for (let i = allTagged.length - 1; i >= 0; i--) {
+    const match = allTagged[i];
+    if (/【\s*分镜\s*(?:1|一|01)\s*】/.test(match[1])) {
+      targetScope = match[1].trim();
+      beforeScope = content.slice(0, match.index);
+      break;
+    }
+  }
+
+  // 2. 如果没有完整闭合标签，检查未闭合的 <VIDEO_PROMPT> 且其后紧跟“分镜1”
+  if (!targetScope) {
+    const openTags = [...content.matchAll(/<VIDEO_PROMPT>/gi)];
+    for (let i = openTags.length - 1; i >= 0; i--) {
+      const tagIndex = openTags[i].index;
+      const after = content.slice(tagIndex + openTags[i][0].length);
+      if (/【\s*分镜\s*(?:1|一|01)\s*】/.test(after)) {
+        targetScope = after.trim();
+        beforeScope = content.slice(0, tagIndex);
+        break;
+      }
+    }
+  }
+
+  // 3. 如果没有标签，检查“最终提示词”分隔标记（模型意识流推演结束后输出的分隔标志）
+  if (!targetScope) {
+    const splitRegex = /(?:^|\n)\s*(?:#+\s*|\*{1,3}\s*)?(?:最终提示词|最终视频提示词|最终分镜)[：:]?\s*(?:\*{1,3})?(?:\n|$)/gi;
+    const splitMatches = [...content.matchAll(splitRegex)];
+    if (splitMatches.length > 0) {
+      const lastMatch = splitMatches[splitMatches.length - 1];
+      const after = content.slice(lastMatch.index + lastMatch[0].length);
+      if (/【\s*分镜\s*(?:1|一|01)\s*】/.test(after)) {
+        targetScope = after.trim();
+        beforeScope = content.slice(0, lastMatch.index);
+      }
+    }
+  }
+
+  // 4. 回退：如果全无标记，在整体内容中查找分镜
+  if (!targetScope) {
+    targetScope = content;
+    beforeScope = "";
+  }
+
   const marker = /【\s*分镜\s*([0-9一二三四五六七八九十〇零]+)\s*】/g;
-  const markers = [...scope.matchAll(marker)];
-  if (!markers.length || chineseNumber(markers[0][1]) !== 1) throw new Error("模型未返回有效分镜：没有找到分镜1。原始输出已保存在调试日志中。");
+  let markers = [...targetScope.matchAll(marker)];
+
+  // 过滤掉复述提示词规则的误匹配（如“【分镜1】开始、编号连续的最终视频提示词，不得放入分析”）
+  markers = markers.filter((m) => {
+    const following = targetScope.slice(m.index + m[0].length, m.index + m[0].length + 60);
+    if (/^\s*(?:开始|不得放入|标记内部|到分镜|编号连续)/.test(following)) return false;
+    return true;
+  });
+
+  if (!markers.length || chineseNumber(markers[0][1]) !== 1) {
+    throw new Error("模型未返回有效分镜：没有找到分镜1。原始输出已保存在调试日志中。");
+  }
+
   const numbers = markers.map((item) => chineseNumber(item[1]));
-  if (numbers.some((number, index) => number !== index + 1)) throw new Error("模型返回的分镜编号不连续。原始输出已保存在调试日志中。");
-  const shotIndex = markers[0].index || 0;
-  const prompt = scope.slice(shotIndex).replace(/\s*```\s*$/u, "").trim();
+  if (numbers.some((number, index) => number !== index + 1)) {
+    throw new Error("模型返回的分镜编号不连续。原始输出已保存在调试日志中。");
+  }
+
+  let shotIndex = markers[0].index || 0;
+  const beforeText = targetScope.slice(0, shotIndex);
+  if (/(\*\*|#+\s*|\*)\s*$/u.test(beforeText)) {
+    const prefixMatch = beforeText.match(/(\*\*|#+\s*|\*)\s*$/u);
+    if (prefixMatch && prefixMatch.index !== undefined) {
+      shotIndex = prefixMatch.index;
+    }
+  }
+
+  const prompt = targetScope.slice(shotIndex).replace(/\s*```\s*$/u, "").trim();
   if (!prompt) throw new Error("模型未返回有效的视频提示词。原始输出已保存在调试日志中。");
-  const beforeTag = tagged?.index ? raw.slice(0, tagged.index) : "";
-  const imagination = [beforeTag, scope.slice(0, shotIndex)].filter(Boolean).join("\n").trim();
+
+  let imagination = [reasoning, beforeScope, targetScope.slice(0, shotIndex)]
+    .filter(Boolean)
+    .join("\n\n")
+    .replace(/(?:最终提示词|意识流推演|思考过程|提示词)[：:]?\s*$/ui, "")
+    .replace(/[\*\#\_]+\s*$/g, "")
+    .trim();
+
+  if (/^[\*\#\_\s\:\：\-\=]*$/.test(imagination)) {
+    imagination = "";
+  }
+
   return {imagination, prompt};
 };
 
-const parseSelectionOutput = (raw: string, _original?: string, _allowShotExpansion?: boolean) => {
+const parseSelectionOutput = (raw: string) => {
   const imagination = raw.match(/<analysis>([\s\S]*?)<\/analysis>/i)?.[1]?.trim() || "";
   const tagged = raw.match(/<replacement>([\s\S]*?)<\/replacement>/i)?.[1]?.trim();
   const fallback = raw.split(/最终提示词\s*[：:]?/).at(-1)?.trim() || raw.trim();
@@ -193,19 +310,34 @@ const parseReview = (raw: string): Review => {
   } catch {return {mustFix: ["验收输出无法解析，请导演自行重新检查剧本与提示词。"], shouldFix: [], optional: []};}
 };
 
-async function callDeepSeek(apiKey: string, model: DeepSeekModel, messages: Array<{role: string; content: string}>, signal: AbortSignal, json = false, temperature = 0.8, maxTokens = 7000) {
+async function callDeepSeek(
+  apiKey: string,
+  model: DeepSeekModel,
+  messages: Array<{role: string; content: string}>,
+  signal?: AbortSignal,
+  json = false,
+  temperature = 0.8,
+  maxTokens?: number,
+  isCancelled?: () => boolean,
+) {
+  if (isCancelled?.() || signal?.aborted) throw new Error("任务已取消");
+  const defaultMaxTokens = isKimiModel(model) ? 15000 : DEEPSEEK_MAX_TOKENS;
+  const effectiveMaxTokens = maxTokens ?? defaultMaxTokens;
+
   if (isKimiModel(model)) {
-    const {response, payload} = await requestChatCompletions(model, apiKey, {messages, json, temperature, maxTokens}, signal);
+    const {response, payload} = await requestChatCompletions(model, apiKey, {messages, json, temperature, maxTokens: effectiveMaxTokens}, signal);
+    if (isCancelled?.() || signal?.aborted) throw new Error("任务已取消");
     if (!response.ok) throw new Error(`Kimi 请求失败（${response.status}）：${(await response.text()).slice(0, 300)}`);
     const data = await response.json();
     const content = String(data.choices?.[0]?.message?.content || "").trim();
     const reasoning = String(data.choices?.[0]?.message?.reasoning_content || "").trim();
+    const finishReason = data.choices?.[0]?.finish_reason;
     const rawOutput = reasoning ? `思考过程：\n${reasoning}\n\n${content}` : content;
-    return {rawInput: JSON.stringify(payload), rawOutput};
+    return {rawInput: JSON.stringify(payload), rawOutput, content, reasoning, finishReason};
   }
   // 普通文本是 API 默认输出模式；仅结构化节点声明 json_object。
   // 部分 DeepSeek 网关会将 response_format: {type: "text"} 视为非标准参数并直接报内部错误。
-  const payload = {model, messages, temperature, thinking: {type: "disabled"}, max_tokens: maxTokens, ...(json ? {response_format: {type: "json_object" as const}} : {}), stream: false};
+  const payload = {model, messages, temperature, max_tokens: effectiveMaxTokens, ...(json ? {response_format: {type: "json_object" as const}} : {}), stream: false};
   const localProxy = process.env.DEEPSEEK_LOCAL_PROXY_URL;
   // 本地预览优先走代理；代理网络短暂失败时，服务端会自动直连官方接口。
   // 上游偶发 5xx 时重试，避免把 DeepSeek 的临时 internal error 直接暴露给用户。
@@ -218,17 +350,24 @@ async function callDeepSeek(apiKey: string, model: DeepSeekModel, messages: Arra
   let lastError = "";
 
   for (let attempt = 0; attempt < 3; attempt += 1) {
+    if (isCancelled?.() || signal?.aborted) throw new Error("任务已取消");
     for (const endpoint of endpoints) {
+      if (isCancelled?.() || signal?.aborted) throw new Error("任务已取消");
       try {
         const response = await fetch(endpoint.url, {
           method: "POST",
           headers: endpoint.headers,
           body: JSON.stringify(payload),
-          signal,
+          ...(signal ? {signal} : {}),
         });
+        if (isCancelled?.() || signal?.aborted) throw new Error("任务已取消");
         if (response.ok) {
           const data = await response.json();
-          return {rawInput: JSON.stringify(payload), rawOutput: String(data.choices?.[0]?.message?.content || "").trim()};
+          const content = String(data.choices?.[0]?.message?.content || "").trim();
+          const reasoning = String(data.choices?.[0]?.message?.reasoning_content || "").trim();
+          const finishReason = data.choices?.[0]?.finish_reason;
+          const rawOutput = reasoning ? `思考过程：\n${reasoning}\n\n${content}` : content;
+          return {rawInput: JSON.stringify(payload), rawOutput, content, reasoning, finishReason};
         }
         const detail = (await response.text()).slice(0, 300);
         // 请求本身不合法、鉴权失效或余额权限问题不应被重试掩盖。
@@ -237,7 +376,7 @@ async function callDeepSeek(apiKey: string, model: DeepSeekModel, messages: Arra
         }
         lastError = `DeepSeek 请求失败（${response.status}）：${detail}`;
       } catch (error) {
-        if (signal.aborted) throw error;
+        if (isCancelled?.() || signal?.aborted) throw error;
         const message = error instanceof Error ? error.message : "网络请求失败";
         if (/DeepSeek 请求失败（(400|401|403)）/.test(message)) throw error;
         lastError = message;
@@ -375,22 +514,22 @@ const FUSION_SYSTEM = `你坐在监视器前，要把同一段剧本生成的两
 
 最终稿必须保持V14-5的分镜数量、顺序、景别、机位和台词归属，不新增、删除或合并分镜。写完后再默读一次最终稿，删除跨分镜重复的台词与动作。`;
 
-export async function GET() {
-  const exposedOptions = ARCHIVED_PROMPT_OPTIONS;
-  return Response.json({
-    current: DEFAULT_ARCHIVED_PROMPT_VERSION,
-    options: exposedOptions.map(({value, label, note}) => ({value, label, note})),
-  });
-}
-
-export async function POST(request: NextRequest) {
-  const model = resolveDeepSeekModel(request); console.log("Received cookies:", request.cookies.getAll(), "Resolved model:", model);
-  const apiKey = getModelApiKey(model);
-  if (!apiKey) return Response.json({error: getMissingKeyMessage(model)}, {status: 503});
-  let body: GenerateRequest;
-  try {body = await request.json();} catch {return Response.json({error: "请求内容无效。"}, {status: 400});}
+async function executeGeneration(
+  body: GenerateRequest,
+  model: AiModel,
+  apiKey: string,
+  signal?: AbortSignal,
+  onStageChange?: (stage: string) => void,
+  isCancelled?: () => boolean,
+): Promise<{finalPrompt: string; localEditWarning?: string; finalRawInput?: string}> {
+  const checkCancelled = () => {
+    if (isCancelled?.() || signal?.aborted) {
+      throw new Error("任务已取消");
+    }
+  };
+  checkCancelled();
   const segmentText = clip(body.segmentText).trim();
-  if (!segmentText) return Response.json({error: "片段内容为空。"}, {status: 400});
+  if (!segmentText) throw new Error("片段内容为空。");
   const allowedPromptOptions = ARCHIVED_PROMPT_OPTIONS;
   const promptVersion = typeof body.promptVersion === "string" && allowedPromptOptions.some((item) => item.value === body.promptVersion)
     ? body.promptVersion
@@ -403,6 +542,8 @@ export async function POST(request: NextRequest) {
   };
 
   try {
+    checkCancelled();
+    onStageChange?.(isKimiModel(model) ? `${getKimiLabel(model)} 正在进行深度意识流推演与分镜构思……` : "正在运行 Few-shot 核心节点……");
     const task = body.mode === "selection"
       ? `执行一次精准的局部修改推演。针对 <selection> 内的文字进行修改，<before> 与 <after> 只是边界参照。\n\n<before>\n${clip(body.selectionPrefix, 500)}\n</before>\n\n<selection>\n${clip(body.selectedPromptText)}\n</selection>\n\n<after>\n${clip(body.selectionSuffix, 500)}\n</after>\n\n<comment>\n${clip(body.editInstruction)}\n</comment>\n\n先像导演一样在脑中连续播放选区前、选区和选区后的画面，围绕用户批注进行局部意识流推演：检查动作承接、人物位置、朝向、视线、情绪和运镜是否顺畅；想清楚后再给出修改结果。`
       : body.mode === "improve" ? `在现有提示词基础上重新想象并改进：\n${clip(body.existingPrompt)}` : "从头想象并撰写这个片段的视频提示词。";
@@ -433,25 +574,25 @@ export async function POST(request: NextRequest) {
         callDeepSeek(apiKey, model, [
           {role: "system", content: v14System},
           {role: "user", content: `${context}\n\n你位于双路生成流程的“分镜结构”节点。按当前提示词完整生成，重点保证镜头设计、人物调度和空间连续性。`},
-        ], request.signal),
+        ], signal),
         callDeepSeek(apiKey, model, [
           {role: "system", content: v72System},
           {role: "user", content: `${context}\n\n你位于双路生成流程的“表演设计”节点。按当前提示词完整生成，重点让人物表演、情绪递进和动作力度具有感染力。`},
-        ], request.signal),
+        ], signal),
       ]);
       if (!v14Call.rawOutput || !v72Call.rawOutput) throw new Error("并行生成节点没有返回完整结果");
 
       let v14Draft: ReturnType<typeof parseDirectorOutput>;
       let v72Draft: ReturnType<typeof parseDirectorOutput>;
       try {
-        v14Draft = parseDirectorOutput(v14Call.rawOutput);
+        v14Draft = parseDirectorOutput(v14Call.content || v14Call.rawOutput, v14Call.reasoning);
         logNode("director_v14_5", parallelStarted, v14Call.rawInput, v14Call.rawOutput, {prompt: v14Draft.prompt}, v14Draft.imagination);
       } catch (error) {
         logNode("director_v14_5_invalid", parallelStarted, v14Call.rawInput, v14Call.rawOutput, {parseError: error instanceof Error ? error.message : "V14-5分镜解析失败"}, v14Call.rawOutput);
         throw error;
       }
       try {
-        v72Draft = parseDirectorOutput(v72Call.rawOutput);
+        v72Draft = parseDirectorOutput(v72Call.content || v72Call.rawOutput, v72Call.reasoning);
         logNode("director_v7_2_performance", parallelStarted, v72Call.rawInput, v72Call.rawOutput, {prompt: v72Draft.prompt}, v72Draft.imagination);
       } catch (error) {
         logNode("director_v7_2_performance_invalid", parallelStarted, v72Call.rawInput, v72Call.rawOutput, {parseError: error instanceof Error ? error.message : "V7-2分镜解析失败"}, v72Call.rawOutput);
@@ -465,24 +606,24 @@ export async function POST(request: NextRequest) {
       draftCall = await callDeepSeek(apiKey, model, [
         {role: "system", content: directorSystem},
         {role: "user", content: fusionInput},
-      ], request.signal, false, 0.3, 7000);
+      ], signal, false, 0.3);
       if (!draftCall.rawOutput) throw new Error("融合节点没有返回结果");
       try {
-        draft = parseDirectorOutput(draftCall.rawOutput);
+        draft = parseDirectorOutput(draftCall.content || draftCall.rawOutput, draftCall.reasoning);
       } catch (error) {
         logNode("director_fusion_invalid", draftStarted, draftCall.rawInput, draftCall.rawOutput, {parseError: error instanceof Error ? error.message : "融合分镜解析失败"}, draftCall.rawOutput);
         throw error;
       }
       logNode("director_fusion", draftStarted, draftCall.rawInput, draftCall.rawOutput, {prompt: draft.prompt}, draft.imagination);
     } else {
-      draftCall = await callDeepSeek(apiKey, model, [{role: "system", content: directorSystem}, {role: "user", content: context}], request.signal);
-      if (!draftCall.rawOutput) throw new Error("DeepSeek 没有返回初稿");
+      draftCall = await callDeepSeek(apiKey, model, [{role: "system", content: directorSystem}, {role: "user", content: context}], signal);
+      if (!draftCall.rawOutput) throw new Error(`${isKimiModel(model) ? "Kimi" : "DeepSeek"} 没有返回初稿`);
       try {
         if (body.mode === "selection") {
         const original = clip(body.selectedPromptText);
         let parsed: ReturnType<typeof parseSelectionOutput>;
         try {
-          parsed = parseSelectionOutput(draftCall.rawOutput, original, allowShotExpansion);
+          parsed = parseSelectionOutput(draftCall.content || draftCall.rawOutput, original, allowShotExpansion);
         } catch (firstError) {
           logNode("director_selection_out_of_bounds", draftStarted, draftCall.rawInput, draftCall.rawOutput, {
             parseError: firstError instanceof Error ? firstError.message : "局部修改越过选区",
@@ -494,10 +635,10 @@ export async function POST(request: NextRequest) {
             {role: "user", content: context},
             {role: "assistant", content: draftCall.rawOutput},
             {role: "user", content: retryInstruction},
-          ], request.signal);
+          ], signal);
           draftStarted = retryStarted;
           if (!draftCall.rawOutput) throw new Error("DeepSeek 没有返回局部修改结果");
-          parsed = parseSelectionOutput(draftCall.rawOutput, original, allowShotExpansion);
+          parsed = parseSelectionOutput(draftCall.content || draftCall.rawOutput, original, allowShotExpansion);
         }
         if (parsed.cropped) localEditWarning = "模型误带的相邻分镜已被自动移除，预览中仅保留当前选区。";
         if (!allowShotExpansion && parsed.prompt.length > Math.max(original.length * 3, original.length + 120) && !localEditWarning) {
@@ -505,7 +646,7 @@ export async function POST(request: NextRequest) {
         }
         draft = parsed;
         } else {
-          draft = parseDirectorOutput(draftCall.rawOutput);
+          draft = parseDirectorOutput(draftCall.content || draftCall.rawOutput, draftCall.reasoning);
         }
       } catch (error) {
         logNode("director_draft_invalid", draftStarted, draftCall.rawInput, draftCall.rawOutput, {parseError: error instanceof Error ? error.message : "分镜解析失败"}, draftCall.rawOutput);
@@ -518,42 +659,42 @@ export async function POST(request: NextRequest) {
     let finalRawInput = draftCall.rawInput;
 
     if (body.settings?.reviewEnabled) {
+      onStageChange?.("正在执行分镜验收与优化……");
+      const reviewInput = `原剧本：\n${segmentText}\n\n待验收提示词：\n${draft.prompt}`;
+      const reviewSpecs = [
+        {name: "review_fidelity", prompt: FIDELITY_REVIEW},
+        {name: "review_rhythm", prompt: RHYTHM_REVIEW},
+        {name: "review_visual", prompt: VISUAL_REVIEW},
+      ];
+      const reviewStarted = Date.now();
+      const reviewCalls = await Promise.all(reviewSpecs.map((spec) => callDeepSeek(apiKey, model, [{role: "system", content: spec.prompt}, {role: "user", content: reviewInput}], signal, true, 0.2, 1600)));
+      const reviews = reviewCalls.map((call, index) => {
+        const review = parseReview(call.content || call.rawOutput);
+        logNode(reviewSpecs[index].name, reviewStarted, call.rawInput, call.rawOutput, review);
+        return review;
+      });
+      const merged = reviews.reduce((all, review) => ({mustFix: [...all.mustFix, ...review.mustFix], shouldFix: [...all.shouldFix, ...review.shouldFix], optional: [...all.optional, ...review.optional]}), emptyReview());
 
-    const reviewInput = `原剧本：\n${segmentText}\n\n待验收提示词：\n${draft.prompt}`;
-    const reviewSpecs = [
-      {name: "review_fidelity", prompt: FIDELITY_REVIEW},
-      {name: "review_rhythm", prompt: RHYTHM_REVIEW},
-      {name: "review_visual", prompt: VISUAL_REVIEW},
-    ];
-    const reviewStarted = Date.now();
-    const reviewCalls = await Promise.all(reviewSpecs.map((spec) => callDeepSeek(apiKey, model, [{role: "system", content: spec.prompt}, {role: "user", content: reviewInput}], request.signal, true, 0.2, 1600)));
-    const reviews = reviewCalls.map((call, index) => {
-      const review = parseReview(call.rawOutput);
-      logNode(reviewSpecs[index].name, reviewStarted, call.rawInput, call.rawOutput, review);
-      return review;
-    });
-    const merged = reviews.reduce((all, review) => ({mustFix: [...all.mustFix, ...review.mustFix], shouldFix: [...all.shouldFix, ...review.shouldFix], optional: [...all.optional, ...review.optional]}), emptyReview());
+      if (merged.mustFix.length || merged.shouldFix.length) {
+        const revisionStarted = Date.now();
+        const revisionInput = `${revisionContext}\n\n这是你的初稿：\n${draftCall.rawOutput}\n\n以下是验收节点提出的问题。你仍然拥有最终创作权，请重新用意识流审视，只修改确实成立的问题，然后输出完整修改稿：\n${JSON.stringify(merged, null, 2)}`;
+        const revisionCall = await callDeepSeek(apiKey, model, [{role: "system", content: directorSystem}, {role: "user", content: revisionInput}], signal);
+        if (revisionCall.rawOutput) {
+          let revised: ReturnType<typeof parseDirectorOutput>;
+          try {
+            revised = parseDirectorOutput(revisionCall.content || revisionCall.rawOutput, revisionCall.reasoning);
+          } catch (error) {
+            logNode("director_revision_invalid", revisionStarted, revisionCall.rawInput, revisionCall.rawOutput, {parseError: error instanceof Error ? error.message : "分镜解析失败"}, revisionCall.rawOutput);
+            throw error;
+          }
+          finalPrompt = revised.prompt; finalRawInput = revisionCall.rawInput;
+          logNode("director_revision", revisionStarted, revisionCall.rawInput, revisionCall.rawOutput, {prompt: revised.prompt, appliedReviews: merged}, revised.imagination);
 
-    if (merged.mustFix.length || merged.shouldFix.length) {
-      const revisionStarted = Date.now();
-      const revisionInput = `${revisionContext}\n\n这是你的初稿：\n${draftCall.rawOutput}\n\n以下是验收节点提出的问题。你仍然拥有最终创作权，请重新用意识流审视，只修改确实成立的问题，然后输出完整修改稿：\n${JSON.stringify(merged, null, 2)}`;
-      const revisionCall = await callDeepSeek(apiKey, model, [{role: "system", content: directorSystem}, {role: "user", content: revisionInput}], request.signal);
-      if (revisionCall.rawOutput) {
-        let revised: ReturnType<typeof parseDirectorOutput>;
-        try {
-          revised = parseDirectorOutput(revisionCall.rawOutput);
-        } catch (error) {
-          logNode("director_revision_invalid", revisionStarted, revisionCall.rawInput, revisionCall.rawOutput, {parseError: error instanceof Error ? error.message : "分镜解析失败"}, revisionCall.rawOutput);
-          throw error;
+          const recheckStarted = Date.now();
+          const recheckCall = await callDeepSeek(apiKey, model, [{role: "system", content: RECHECK_REVIEW}, {role: "user", content: `原剧本：\n${segmentText}\n\n修改后提示词：\n${finalPrompt}`}], signal, true, 0.2, 1800);
+          logNode("review_final", recheckStarted, recheckCall.rawInput, recheckCall.rawOutput, parseReview(recheckCall.content || recheckCall.rawOutput));
         }
-        finalPrompt = revised.prompt; finalRawInput = revisionCall.rawInput;
-        logNode("director_revision", revisionStarted, revisionCall.rawInput, revisionCall.rawOutput, {prompt: revised.prompt, appliedReviews: merged}, revised.imagination);
-
-        const recheckStarted = Date.now();
-        const recheckCall = await callDeepSeek(apiKey, model, [{role: "system", content: RECHECK_REVIEW}, {role: "user", content: `原剧本：\n${segmentText}\n\n修改后提示词：\n${finalPrompt}`}], request.signal, true, 0.2, 1800);
-        logNode("review_final", recheckStarted, recheckCall.rawInput, recheckCall.rawOutput, parseReview(recheckCall.rawOutput));
       }
-    }
     } // End of reviewEnabled block
 
     if (body.mode === "selection") {
@@ -570,10 +711,10 @@ AI 基于用户的修改指令 <comment>，生成了修改后的内容 <modified
 2. 直接输出提取后的最终提示词文本，绝对不要包含任何额外的解释说明、XML 标签或 markdown 格式。`;
       const postInput = `用户的修改指令：\n<comment>\n${clip(body.editInstruction)}\n</comment>\n\n选区前文（仅作边界参考）：\n<before>\n${clip(body.selectionPrefix, 500)}\n</before>\n\n原选区内容：\n<selection>\n${clip(body.selectedPromptText)}\n</selection>\n\n选区后文（仅作边界参考）：\n<after>\n${clip(body.selectionSuffix, 500)}\n</after>\n\nAI修改后生成的完整内容（可能多包含了before或after里的分镜）：\n<modified>\n${finalPrompt}\n</modified>`;
 
-      const postCall = await callDeepSeek(apiKey, model, [{role: "system", content: postSystem}, {role: "user", content: postInput}], request.signal, false, 0.1);
+      const postCall = await callDeepSeek(apiKey, model, [{role: "system", content: postSystem}, {role: "user", content: postInput}], signal, false, 0.1);
       if (postCall.rawOutput) {
         finalRawInput = postCall.rawInput;
-        finalPrompt = postCall.rawOutput.trim();
+        finalPrompt = (postCall.content || postCall.rawOutput).trim();
         logNode("director_selection_postprocess", postStarted, postCall.rawInput, postCall.rawOutput, {prompt: finalPrompt});
       }
     }
@@ -589,12 +730,12 @@ AI 基于用户的修改指令 <comment>，生成了修改后的内容 <modified
           apiKey,
           model,
           [{role: "system", content: SHOT_SPLIT_SYSTEM}, {role: "user", content: `待检查分镜：\n${beforeSplit}`}],
-          request.signal,
+          signal,
           false,
           0.1,
-          5200,
+          isKimiModel(model) ? 15000 : DEEPSEEK_MAX_TOKENS,
         );
-        finalPrompt = parseAtomicPrompt(splitCall.rawOutput, beforeSplit, segmentText);
+        finalPrompt = parseAtomicPrompt(splitCall.content || splitCall.rawOutput, beforeSplit, segmentText);
         if (finalPrompt !== beforeSplit) finalRawInput = splitCall.rawInput;
         logNode("shot_split", splitStarted, splitCall.rawInput, splitCall.rawOutput, {
           changed: finalPrompt !== beforeSplit,
@@ -622,12 +763,12 @@ AI 基于用户的修改指令 <comment>，生成了修改后的内容 <modified
           apiKey,
           model,
           [{role: "system", content: SPATIAL_CORRECTION_SYSTEM}, {role: "user", content: `原剧本：\n${segmentText}\n\n待纠正分镜：\n${beforeCorrection}`}],
-          request.signal,
+          signal,
           true,
           0.1,
-          4200,
+          isKimiModel(model) ? 15000 : 32000,
         );
-        const applied = applyFramePatches(beforeCorrection, correctionManifest, parseFramePatches(correctionCall.rawOutput), segmentText);
+        const applied = applyFramePatches(beforeCorrection, correctionManifest, parseFramePatches(correctionCall.content || correctionCall.rawOutput), segmentText);
         finalPrompt = applied.prompt;
         if (applied.accepted.length) finalRawInput = correctionCall.rawInput;
         logNode("spatial_correction", correctionStarted, correctionCall.rawInput, correctionCall.rawOutput, {
@@ -656,12 +797,12 @@ AI 基于用户的修改指令 <comment>，生成了修改后的内容 <modified
           apiKey,
           model,
           [{role: "system", content: SPATIAL_COMPLETION_SYSTEM}, {role: "user", content: `原剧本：\n${segmentText}\n\n已纠正分镜：\n${beforeCompletion}`}],
-          request.signal,
+          signal,
           true,
           0.1,
-          4200,
+          isKimiModel(model) ? 15000 : 32000,
         );
-        const applied = applyFramePatches(beforeCompletion, completionManifest, parseFramePatches(completionCall.rawOutput), segmentText);
+        const applied = applyFramePatches(beforeCompletion, completionManifest, parseFramePatches(completionCall.content || completionCall.rawOutput), segmentText);
         finalPrompt = applied.prompt;
         if (applied.accepted.length) finalRawInput = completionCall.rawInput;
         logNode("spatial_completion", completionStarted, completionCall.rawInput, completionCall.rawOutput, {
@@ -688,24 +829,24 @@ AI 基于用户的修改指令 <comment>，生成了修改后的内容 <modified
           apiKey,
           model,
           [{role: "system", content: FRAME_MANIFEST_SYSTEM}, {role: "user", content: manifestInput}],
-          request.signal,
+          signal,
           true,
           0.15,
-          4200,
+          isKimiModel(model) ? 15000 : 32000,
         );
-        const manifest = parseFrameManifest(manifestCall.rawOutput, closureShots.length);
+        const manifest = parseFrameManifest(manifestCall.content || manifestCall.rawOutput, closureShots.length);
         logNode("frame_manifest", closureStarted, manifestCall.rawInput, manifestCall.rawOutput, manifest);
 
         const closureCall = await callDeepSeek(
           apiKey,
           model,
           [{role: "system", content: FRAME_CLOSURE_SYSTEM}, {role: "user", content: `${manifestInput}\n\n画框清单：\n${JSON.stringify(manifest, null, 2)}`}],
-          request.signal,
+          signal,
           true,
           0.1,
-          4200,
+          isKimiModel(model) ? 15000 : 32000,
         );
-        const applied = applyFramePatches(beforeClosure, manifest, parseFramePatches(closureCall.rawOutput), segmentText);
+        const applied = applyFramePatches(beforeClosure, manifest, parseFramePatches(closureCall.content || closureCall.rawOutput), segmentText);
         finalPrompt = applied.prompt;
         if (applied.accepted.length) finalRawInput = closureCall.rawInput;
         logNode("frame_closure", closureStarted, closureCall.rawInput, closureCall.rawOutput, {
@@ -725,14 +866,140 @@ AI 基于用户的修改指令 <comment>，生成了修改后的内容 <modified
 
     setFinalDebugInput(debugRun.id, finalRawInput);
     completeDebugRun(debugRun.id, finalPrompt);
-    return new Response(finalPrompt, {headers: {
+    return {finalPrompt, localEditWarning, finalRawInput};
+  } catch (error) {
+    const defaultMsg = isKimiModel(model) ? "Kimi 请求失败" : "DeepSeek 请求失败";
+    const message = error instanceof Error ? error.message : defaultMsg;
+    failDebugRun(debugRun.id, message);
+    throw new Error(message);
+  }
+}
+
+export async function GET(request: NextRequest) {
+  const url = new URL(request.url);
+  const taskId = url.searchParams.get("taskId");
+  if (taskId) {
+    const task = tasks.get(taskId);
+    if (!task) return Response.json({status: "not_found"}, {status: 404});
+    return Response.json({
+      id: task.id,
+      status: task.status,
+      startedAt: task.startedAt,
+      completedAt: task.completedAt,
+      elapsedMs: (task.completedAt || Date.now()) - task.startedAt,
+      stage: task.stage,
+      result: task.result,
+      error: task.error,
+    });
+  }
+
+  const exposedOptions = ARCHIVED_PROMPT_OPTIONS;
+  return Response.json({
+    current: DEFAULT_ARCHIVED_PROMPT_VERSION,
+    options: exposedOptions.map(({value, label, note}) => ({value, label, note})),
+  });
+}
+
+export async function DELETE(request: NextRequest) {
+  const url = new URL(request.url);
+  const taskId = url.searchParams.get("taskId");
+  if (taskId) {
+    const task = tasks.get(taskId);
+    if (task) {
+      task.status = "cancelled";
+      tasks.delete(taskId);
+    }
+    return Response.json({ok: true});
+  }
+  return Response.json({error: "缺少 taskId"}, {status: 400});
+}
+
+export async function POST(request: NextRequest) {
+  let body: GenerateRequest;
+  try {body = await request.json();} catch {return Response.json({error: "请求内容无效。"}, {status: 400});}
+  const model = resolveDeepSeekModel(request, body.model);
+  console.log("Resolved model:", model);
+  const apiKey = getModelApiKey(model);
+  if (!apiKey) return Response.json({error: getMissingKeyMessage(model)}, {status: 503});
+  const segmentText = clip(body.segmentText).trim();
+  if (!segmentText) return Response.json({error: "片段内容为空。"}, {status: 400});
+
+  const taskId = typeof body.taskId === "string" ? body.taskId.trim() : "";
+  const asyncTask = body.asyncTask === true || Boolean(taskId);
+
+  if (taskId && asyncTask) {
+    const task: DeepSeekTask = {
+      id: taskId,
+      status: "running",
+      startedAt: Date.now(),
+      stage: isKimiModel(model) ? `${getKimiLabel(model)} 正在进行深度意识流推演与分镜构思……` : "正在运行 Few-shot 核心节点……",
+    };
+    tasks.set(taskId, task);
+
+    const isCancelled = () => {
+      const current = tasks.get(taskId);
+      return !current || current.status === "cancelled";
+    };
+
+    // 启动后台异步任务，不阻塞前端 HTTP 连接（彻底免疫网关超时与断连）
+    (async () => {
+      try {
+        const result = await executeGeneration(
+          body,
+          model,
+          apiKey,
+          undefined,
+          (stage) => {
+            const current = tasks.get(taskId);
+            if (current && current.status === "running") {
+              current.stage = stage;
+            }
+          },
+          isCancelled,
+        );
+        const current = tasks.get(taskId);
+        if (current && current.status !== "cancelled") {
+          current.status = "done";
+          current.completedAt = Date.now();
+          current.stage = "生成完成";
+          current.result = {
+            prompt: result.finalPrompt,
+            warning: result.localEditWarning,
+            rawInput: result.finalRawInput,
+            model,
+          };
+        }
+      } catch (err) {
+        const current = tasks.get(taskId);
+        if (current && current.status !== "cancelled") {
+          current.status = "error";
+          current.completedAt = Date.now();
+          current.error = err instanceof Error ? err.message : (isKimiModel(model) ? "Kimi 请求失败" : "DeepSeek 请求失败");
+        }
+      } finally {
+        setTimeout(() => tasks.delete(taskId), 3600000); // 1 小时后释放内存
+      }
+    })();
+
+    return Response.json({
+      status: "accepted",
+      taskId,
+      model,
+      message: "生成任务已在后台启动",
+    });
+  }
+
+  // 同步执行模式（未传 taskId 时向下兼容）
+  try {
+    const result = await executeGeneration(body, model, apiKey, request.signal);
+    return new Response(result.finalPrompt, {headers: {
       "Content-Type": "text/plain; charset=utf-8",
       "Cache-Control": "no-cache, no-transform",
-      ...(localEditWarning ? {"X-Local-Edit-Warning": encodeURIComponent(localEditWarning)} : {}),
+      ...(result.localEditWarning ? {"X-Local-Edit-Warning": encodeURIComponent(result.localEditWarning)} : {}),
     }});
   } catch (error) {
-    const message = error instanceof Error ? error.message : "DeepSeek 请求失败";
-    failDebugRun(debugRun.id, message);
+    const defaultMsg = isKimiModel(model) ? "Kimi 请求失败" : "DeepSeek 请求失败";
+    const message = error instanceof Error ? error.message : defaultMsg;
     return Response.json({error: message}, {status: 502});
   }
 }

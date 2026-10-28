@@ -1,4 +1,22 @@
-import {existsSync, readFileSync, writeFileSync} from "node:fs";
+import {existsSync, readFileSync, readdirSync, writeFileSync} from "node:fs";
+
+// Clean up any stale or orphaned dev server / workerd processes to ensure port 3000 is always free.
+try {
+  const myPid = process.pid;
+  const myPpid = process.ppid;
+  if (existsSync("/proc")) {
+    const pids = readdirSync("/proc").filter((p) => /^\d+$/.test(p)).map(Number);
+    for (const pid of pids) {
+      if (pid === myPid || pid === myPpid || pid === 1) continue;
+      try {
+        const cmd = readFileSync(`/proc/${pid}/cmdline`, "utf8");
+        if ((cmd.includes("vinext") || cmd.includes("workerd")) && !cmd.includes("prepare-dev-vars.mjs")) {
+          process.kill(pid, "SIGKILL");
+        }
+      } catch {}
+    }
+  }
+} catch {}
 
 const keyNames = ["DEEPSEEK_API_KEY", "MOONSHOT_API_KEY", "DASHSCOPE_API_KEY"];
 
